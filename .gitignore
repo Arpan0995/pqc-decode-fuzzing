@@ -1,0 +1,26 @@
+# Maven
+target/
+dependency-reduced-pom.xml
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# macOS
+.DS_Store
+
+# JVM crash/profiling artifacts
+hs_err_pid*
+replay_pid*
+*.hprof
+
+# Jazzer crash reproducers land at the repo root by default; keep curated ones under results/corpus/
+crash-*
+.cifuzz-corpus/
+
+# Scratch runs stay out of the repo
+scratch/
