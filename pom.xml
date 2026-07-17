@@ -15,7 +15,16 @@
   <properties>
     <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <bouncycastle.version>1.84</bouncycastle.version>
+    <!--
+      The library under test. 1.85 is the current release and the primary subject; 1.84 is kept as a
+      positive control, because it carries a real ML-DSA decoder defect that 1.85 fixes (see
+      results/CONTROL-BC184.md). Override on the command line to switch:
+
+          mvn -Dbouncycastle.version=1.84 test
+
+      Both versions expose the same org.bouncycastle.crypto.* API, so one source tree targets either.
+    -->
+    <bouncycastle.version>1.85</bouncycastle.version>
     <junit.version>6.1.1</junit.version>
     <jazzer.version>0.22.1</jazzer.version>
     <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
@@ -67,6 +76,14 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven-surefire-plugin.version}</version>
+        <configuration>
+          <!--
+            Without this the JIT eventually throws preallocated, stackless ArrayIndexOutOfBounds and
+            friends, and anomaly signatures are keyed on the top stack frame. See
+            org.pqcfuzz.env.Environment for why that silently corrupts results rather than failing.
+          -->
+          <argLine>-XX:-OmitStackTraceInFastThrow</argLine>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

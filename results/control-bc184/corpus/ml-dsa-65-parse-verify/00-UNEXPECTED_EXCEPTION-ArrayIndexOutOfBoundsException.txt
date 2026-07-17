@@ -1,0 +1,26 @@
+target:      ml-dsa-65-parse-verify
+outcome:     UNEXPECTED_EXCEPTION
+exception:   java.lang.ArrayIndexOutOfBoundsException
+message:     arraycopy: length -76 is negative
+top frame:   org.bouncycastle.crypto.signers.mldsa.Packing.unpackPublicKey
+hits:        8186
+found via:   TRUNCATE of seed 0
+input size:  33 bytes (nominal 1952)
+
+input (hex):
+  0000  0000000000000000000000000000000000000000000000000000000000000000
+  0020  00
+
+java.lang.ArrayIndexOutOfBoundsException: arraycopy: length -76 is negative
+	at java.base/java.lang.System.arraycopy(Native Method)
+	at org.bouncycastle.util.Arrays.copyOfRange(Unknown Source)
+	at org.bouncycastle.crypto.signers.mldsa.Packing.unpackPublicKey(Unknown Source)
+	at org.bouncycastle.crypto.signers.mldsa.MLDSAEngine.doVerifyInternal(Unknown Source)
+	at org.bouncycastle.crypto.signers.mldsa.MLDSAEngine.verifyInternal(Unknown Source)
+	at org.bouncycastle.crypto.signers.MLDSASigner.verifySignature(Unknown Source)
+	at org.pqcfuzz.target.mldsa.MlDsa65ParseAndVerifyTarget.accepts(MlDsa65ParseAndVerifyTarget.java:89)
+	at org.pqcfuzz.run.TargetExecutor.lambda$execute$0(TargetExecutor.java:43)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
