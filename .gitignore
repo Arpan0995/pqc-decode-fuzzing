@@ -1,5 +1,7 @@
 # Maven
-target/
+# Anchored to the repo root: this must ignore only the top-level Maven build
+# directory, NOT the source package src/main/java/org/pqcfuzz/target/.
+/target/
 dependency-reduced-pom.xml
 
 # IDE
