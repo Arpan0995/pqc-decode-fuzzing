@@ -1,4 +1,4 @@
-# Campaign Results — Fuzzing Java PQC Decode and Verify Paths
+# Campaign Results - Fuzzing Java PQC Decode and Verify Paths
 
 Generated 2026-07-17T07:46:22.336684Z by `FuzzCampaign`.
 
@@ -38,7 +38,7 @@ Every result is reproducible from the campaign seed: it fixes the key pairs, the
 | `ml-dsa-65-parse-verify` | VERIFY | 1952 | 100,000 | 8,125 | 9 | 91,805 | 8,186 | 0 | 0 | 1 |
 | `slh-dsa-sha2-128f-parse-verify` | VERIFY | 32 | 100,000 | 871 | 7 | 99,993 | 0 | 0 | 0 | 0 |
 
-Outcomes are as pre-registered (design §6). `REJECTED` is the *correct* response to malformed input — verification returning false, or a documented exception (`IllegalArgumentException`, `RuntimeCryptoException`, `CryptoException`). `UNEXPECTED_EXCEPTION` is anything else thrown, and is the primary defect class. Throughput is exploratory and host-specific; it also carries the cost of running every input under a timeout watchdog.
+Outcomes are as pre-registered (design §6). `REJECTED` is the *correct* response to malformed input - verification returning false, or a documented exception (`IllegalArgumentException`, `RuntimeCryptoException`, `CryptoException`). `UNEXPECTED_EXCEPTION` is anything else thrown, and is the primary defect class. Throughput is exploratory and host-specific; it also carries the cost of running every input under a timeout watchdog.
 
 ## Pre-registered hypotheses
 
@@ -47,14 +47,14 @@ Fixed in the design before any data was collected (§4), and scored here mechani
 | | Verdict | Evidence |
 |---|---|---|
 | **H1** | not supported | 400,000 inputs across 4 verify target(s): 8,186 undocumented exception(s), 0 forgery acceptance(s). |
-| **H2** | not supported | 400,000 inputs across 4 decode target(s): 0 undocumented exception(s). Separately, 26,405 wrong-length encoding(s) were silently **accepted** — a decoder defect that H2 did not anticipate, since it fails without throwing. |
+| **H2** | not supported | 400,000 inputs across 4 decode target(s): 0 undocumented exception(s). Separately, 26,405 wrong-length encoding(s) were silently **accepted** - a decoder defect that H2 did not anticipate, since it fails without throwing. |
 | **H3** | supported | 69,848 correct-length ciphertext(s) decapsulated: 0 threw. (Wrong-length inputs are outside this hypothesis and are reported separately.) |
 | **H4** | supported | 900,000 input(s) across 9 target(s): 0 timeout(s). |
 
-- **H1** — The ML-DSA and SLH-DSA verify paths are total: no malformed signature causes an uncaught exception or a forgery acceptance.
-- **H2** — The public-key decoders mostly reject with documented exceptions, but fuzzing surfaces at least one input triggering an undocumented runtime exception.
-- **H3** — ML-KEM decapsulation never throws for a correct-length ciphertext: the Fujisaki-Okamoto implicit-rejection branch always returns a secret.
-- **H4** — No input causes a hang (non-termination or super-linear blow-up) within the per-input time budget.
+- **H1** - The ML-DSA and SLH-DSA verify paths are total: no malformed signature causes an uncaught exception or a forgery acceptance.
+- **H2** - The public-key decoders mostly reject with documented exceptions, but fuzzing surfaces at least one input triggering an undocumented runtime exception.
+- **H3** - ML-KEM decapsulation never throws for a correct-length ciphertext: the Fujisaki-Okamoto implicit-rejection branch always returns a secret.
+- **H4** - No input causes a hang (non-termination or super-linear blow-up) within the per-input time budget.
 
 Note that **H2 predicts defects**, so for H2 alone "supported" is the finding and "not supported" is the assurance result.
 
@@ -62,7 +62,7 @@ Note that **H2 predicts defects**, so for H2 alone "supported" is the finding an
 
 ### `ml-kem-768-decap`
 
-Of 100,000 inputs, 69,848 were exactly 1088 bytes — the correct length, so they passed any length check and reached the real parsing.
+Of 100,000 inputs, 69,848 were exactly 1088 bytes - the correct length, so they passed any length check and reached the real parsing.
 
 | Correct-length outcome | Count |
 |---|---:|
@@ -85,7 +85,7 @@ No anomalies.
 
 ### `ml-kem-768-pubkey-parse`
 
-Of 100,000 inputs, 70,044 were exactly 1184 bytes — the correct length, so they passed any length check and reached the real parsing.
+Of 100,000 inputs, 70,044 were exactly 1184 bytes - the correct length, so they passed any length check and reached the real parsing.
 
 | Correct-length outcome | Count |
 |---|---:|
@@ -109,7 +109,7 @@ No anomalies.
 
 ### `ml-dsa-65-verify`
 
-Of 100,000 inputs, 69,985 were exactly 3309 bytes — the correct length, so they passed any length check and reached the real parsing.
+Of 100,000 inputs, 69,985 were exactly 3309 bytes - the correct length, so they passed any length check and reached the real parsing.
 
 | Correct-length outcome | Count |
 |---|---:|
@@ -133,7 +133,7 @@ No anomalies.
 
 ### `ml-dsa-65-pubkey-parse`
 
-Of 100,000 inputs, 70,174 were exactly 1952 bytes — the correct length, so they passed any length check and reached the real parsing.
+Of 100,000 inputs, 70,174 were exactly 1952 bytes - the correct length, so they passed any length check and reached the real parsing.
 
 | Correct-length outcome | Count |
 |---|---:|
@@ -154,7 +154,7 @@ Of 100,000 inputs, 70,174 were exactly 1952 bytes — the correct length, so the
 
 #### Anomalies
 
-**00. ACCEPTED — `-`**
+**00. ACCEPTED - `-`**
 
 - Top frame: `-`
 - Hits: 26,405
@@ -163,7 +163,7 @@ Of 100,000 inputs, 70,174 were exactly 1952 bytes — the correct length, so the
 
 ### `slh-dsa-sha2-128f-verify`
 
-Of 100,000 inputs, 69,908 were exactly 17088 bytes — the correct length, so they passed any length check and reached the real parsing.
+Of 100,000 inputs, 69,908 were exactly 17088 bytes - the correct length, so they passed any length check and reached the real parsing.
 
 | Correct-length outcome | Count |
 |---|---:|
@@ -187,7 +187,7 @@ No anomalies.
 
 ### `slh-dsa-sha2-128f-pubkey-parse`
 
-Of 100,000 inputs, 69,894 were exactly 32 bytes — the correct length, so they passed any length check and reached the real parsing.
+Of 100,000 inputs, 69,894 were exactly 32 bytes - the correct length, so they passed any length check and reached the real parsing.
 
 | Correct-length outcome | Count |
 |---|---:|
@@ -210,7 +210,7 @@ No anomalies.
 
 ### `ml-kem-768-parse-encapsulate`
 
-Of 100,000 inputs, 70,044 were exactly 1184 bytes — the correct length, so they passed any length check and reached the real parsing.
+Of 100,000 inputs, 70,044 were exactly 1184 bytes - the correct length, so they passed any length check and reached the real parsing.
 
 | Correct-length outcome | Count |
 |---|---:|
@@ -234,7 +234,7 @@ No anomalies.
 
 ### `ml-dsa-65-parse-verify`
 
-Of 100,000 inputs, 70,174 were exactly 1952 bytes — the correct length, so they passed any length check and reached the real parsing.
+Of 100,000 inputs, 70,174 were exactly 1952 bytes - the correct length, so they passed any length check and reached the real parsing.
 
 | Correct-length outcome | Count |
 |---|---:|
@@ -256,7 +256,7 @@ Of 100,000 inputs, 70,174 were exactly 1952 bytes — the correct length, so the
 
 #### Anomalies
 
-**00. UNEXPECTED_EXCEPTION — `java.lang.ArrayIndexOutOfBoundsException`**
+**00. UNEXPECTED_EXCEPTION - `java.lang.ArrayIndexOutOfBoundsException`**
 
 - Top frame: `org.bouncycastle.crypto.signers.mldsa.Packing.unpackPublicKey`
 - Message: `arraycopy: length -76 is negative`
@@ -266,7 +266,7 @@ Of 100,000 inputs, 70,174 were exactly 1952 bytes — the correct length, so the
 
 ### `slh-dsa-sha2-128f-parse-verify`
 
-Of 100,000 inputs, 69,894 were exactly 32 bytes — the correct length, so they passed any length check and reached the real parsing.
+Of 100,000 inputs, 69,894 were exactly 32 bytes - the correct length, so they passed any length check and reached the real parsing.
 
 | Correct-length outcome | Count |
 |---|---:|
