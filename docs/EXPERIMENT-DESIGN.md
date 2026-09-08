@@ -174,10 +174,11 @@ maintainers before/at publication (responsible disclosure); the repository recor
 
 ## 12. Amendments to the pre-registration
 
-Four changes were made while building the instrument, before any results were collected. Each is
-recorded here with what prompted it, because a pre-registration that is quietly edited is worth nothing.
-None was made in response to a campaign result; all four came from reading the library and from a
-smoke run during construction.
+Four changes were made while building the instrument, before any results were collected, and a fifth
+(A5) was added on 2026-09-04 to extend the study to a second implementation. Each is recorded here with
+what prompted it, because a pre-registration that is quietly edited is worth nothing. None was made in
+response to a campaign result; A1 to A4 came from reading the library and from a smoke run during
+construction, and A5 records its own smoke finding before its campaigns ran.
 
 ### A1 - Target the current API, not the deprecated `pqc.crypto` shim
 
@@ -228,6 +229,89 @@ frame - BouncyCastle's own thin wrapper over `System.arraycopy`, no more informa
 it delegates to. Keying on it would merge every unrelated `copyOfRange` misuse in the library into a
 single signature, defeating the purpose of deduplication. Skipping it lands on
 `Packing.unpackPublicKey`: the code that computed the bad length, and the code a maintainer would fix.
+
+### A5 - A second implementation: the JDK's own providers (added 2026-09-04)
+
+**When.** Unlike A1 to A4, this amendment was written after the BouncyCastle campaigns of 2026-07-17
+were complete and published in `results/`, and before any JDK campaign was run. Nothing in A1 to A4
+or in the BouncyCastle results changes.
+
+**Change.** Six further targets, named `jdk-*`, drive the same entry points in the JDK's own
+providers, which ship since JDK 24: ML-KEM in `SunJCE` (JEP 496) and ML-DSA in `SUN` (JEP 497). The
+JDK has no SLH-DSA (as of 27-ea), so there are six targets, not nine:
+
+| Target | Entry point (JDK) | Counterpart |
+|---|---|---|
+| `jdk-ml-kem-768-decap` | `KEM.Decapsulator.decapsulate(byte[])` | `ml-kem-768-decap` |
+| `jdk-ml-kem-768-pubkey-parse` | `KeyFactory.generatePublic(X509EncodedKeySpec)` | `ml-kem-768-pubkey-parse` |
+| `jdk-ml-kem-768-parse-encapsulate` | parse, then `KEM.newEncapsulator(...).encapsulate()` | `ml-kem-768-parse-encapsulate` |
+| `jdk-ml-dsa-65-verify` | `Signature.verify(byte[])` after `update(msg)` | `ml-dsa-65-verify` |
+| `jdk-ml-dsa-65-pubkey-parse` | `KeyFactory.generatePublic(X509EncodedKeySpec)` | `ml-dsa-65-pubkey-parse` |
+| `jdk-ml-dsa-65-parse-verify` | parse, then `Signature.initVerify(key)` and `verify(sig)` | `ml-dsa-65-parse-verify` |
+
+**Input wrapping.** The JDK's public API accepts a public key only as an X.509
+`SubjectPublicKeyInfo`. The targets therefore fuzz the *raw* key, exactly as the BouncyCastle
+targets do, and wrap it in a `SubjectPublicKeyInfo` whose DER lengths are recomputed for the payload
+(`JdkPqc.spki`). The JDK's DER layer then passes whatever length the mutator produced, and the
+decision about that length is left to the provider, which is the code under test. Wrapping with the
+*original* header instead would make every length mutation fail in the DER layer for the wrong
+reason, and would measure the DER parser, not the key decoder. Nominal input lengths are therefore
+identical to the BouncyCastle arm (1184, 1952, 1088, 3309 bytes).
+
+**Key material.** ML-DSA-65 keys and signatures are the BouncyCastle arm's own: the key pair is
+derived from the campaign seed by the same generator, its raw public key is imported into the JDK
+(which accepts it and re-encodes it identically), and signatures are made by BouncyCastle's
+deterministic signer. The JDK verifies them. As a result the seed corpora of the five ML-DSA and
+ML-KEM key or signature targets are byte-identical between the arms, and since the mutator is seeded
+identically and the nominal lengths agree, the *i*-th input of a JDK campaign is the *i*-th input of
+the BouncyCastle campaign with the same seed. The one exception is `jdk-ml-kem-768-decap`, whose key
+pair the JDK generates itself from the seed (its generator draws from the supplied `SecureRandom`),
+because JDK 24 cannot import BouncyCastle's PKCS#8 encoding of an ML-KEM private key (JDK 27 can).
+Its seed ciphertexts are JDK encapsulations under a seeded random.
+
+**Documented rejections for the JDK.** "Documented" is a property of the API under test, so the
+classifier now asks the target (`FuzzTarget.isDocumentedRejection`). For the JDK targets the
+whitelist is the set of checked exceptions these APIs declare for malformed input:
+`InvalidKeySpecException` (`KeyFactory`), `InvalidKeyException` (`Signature.initVerify`,
+`KEM.newEncapsulator`), `SignatureException` (`Signature.verify` on a structurally malformed
+signature, the JDK's stated policy: invalid structure throws, a well-formed but wrong signature
+returns false), and `DecapsulateException` (`Decapsulator.decapsulate` on a wrong-length
+ciphertext). Anything else, `ProviderException` included, is `UNEXPECTED_EXCEPTION`. The
+BouncyCastle rule is unchanged.
+
+**Construction-time finding, recorded before the campaign.** As with A3, a smoke test while
+building the targets found something. On JDK 24.0.2 and JDK 27-ea, `KeyFactory.generatePublic`
+accepts a `SubjectPublicKeyInfo` whose inner ML-DSA-65 or ML-KEM-768 key has *any* length (0, 1, 33,
+n-1, n+1 and 100,000 bytes were tried), and `CertificateFactory.generateCertificate` followed by
+`getPublicKey()` returns such a key from a certificate. The size check runs only at use:
+`Signature.initVerify` throws `InvalidKeyException("Incorrect public key size")` and
+`KEM.newEncapsulator` throws `InvalidKeyException("Public key is not the correct size")`. The same
+`KeyFactory` rejects a 31-byte Ed25519 key at parse time ("key length must be 32"). In the JDK
+source, `NamedKeyFactory` builds a `NamedX509Key` from the raw bytes without a length check, and the
+check lives in `ML_DSA.checkPublicKey`, reached from `NamedSignature.engineInitVerify`.
+
+**Predictions, fixed here before running.** (1) `jdk-ml-dsa-65-pubkey-parse` and
+`jdk-ml-kem-768-pubkey-parse` will score `ACCEPTED` on every wrong-length input, deduplicated to one
+distinct anomaly each: the A3 outcome, the same class as the 1.84 control. (2) The composed targets
+will score those inputs `REJECTED`, because the use-time check throws a documented exception; this
+is the difference from 1.84, which threw `ArrayIndexOutOfBoundsException` at the same point. (3) H1,
+H3 and H4 are expected to hold for the JDK arm; H2's "undocumented exception" clause is expected not
+to be supported. (4) The results are expected to be identical on JDK 24 and JDK 27-ea.
+
+**Limits.** The 1.84 control validates the instrument on BouncyCastle. For the JDK arm the
+instrument's sensitivity to the `ACCEPTED` class is demonstrated by the finding above, which the
+classifier scores exactly as A3 intends; its sensitivity to `UNEXPECTED_EXCEPTION` and `TIMEOUT` on
+the JDK has no JDK-specific control, and the paper says so. The coverage-guided (Jazzer) method is
+run on the JDK arm only if the Jazzer agent supports the JVM under test; otherwise the JDK results
+are from the mutation campaign alone, and the report states which.
+
+**Runs.** OpenJDK 25.0.2 (the current long-term-support release) is the primary JVM; JDK 24.0.2
+(Amazon Corretto, the first release with these providers) and JDK 27-ea are the version-stability
+checks. Same campaign parameters as the BouncyCastle arm: 100,000 inputs per target, seed
+`20260717`, 5,000 ms per-input budget, `-XX:-OmitStackTraceInFastThrow`. Results are written to
+`results/jdk25/`, `results/jdk24/` and `results/jdk27ea/`. The coverage-guided harnesses for the two
+parse-only JDK targets fail by design on the empty input (the finding above) and are opt-in
+(`-Dpqcfuzz.jdk.parse=true`); the finding itself is pinned by `JdkKeyLengthValidationTest`.
 
 ### Effect on the hypotheses
 

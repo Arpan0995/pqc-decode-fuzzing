@@ -64,4 +64,14 @@ public interface FuzzTarget {
      *     unchecked and propagate likewise; the runner catches them and counts them as anomalies.
      */
     boolean accepts(byte[] input) throws Exception;
+
+    /**
+     * Whether {@code t}, thrown by {@link #accepts}, is a documented rejection for the API this target
+     * drives, as opposed to an undocumented failure. "Documented" is a property of the library under
+     * test, not of the harness, so a target that drives another provider overrides this. The default is
+     * the BouncyCastle rule in {@link org.pqcfuzz.classify.ExpectedRejections}.
+     */
+    default boolean isDocumentedRejection(Throwable t) {
+        return org.pqcfuzz.classify.ExpectedRejections.isDocumentedRejection(t);
+    }
 }

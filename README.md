@@ -12,8 +12,11 @@ in BouncyCastle and classifies every outcome.
 
 ## Status
 
-Instrument built and validated; campaigns run. Nine targets, two fuzzing methods, results in
-[`results/`](results/). The pre-registered design - targets, outcome classification, hypotheses, and the
+Instrument built and validated; campaigns run. Nine BouncyCastle targets, two fuzzing methods, results in
+[`results/`](results/). Since 2026-09-04 the same campaign also runs against the JDK's own ML-KEM and
+ML-DSA providers (six `jdk-*` targets, JDK 24, 25 and 27-ea): see [`results/JDK-ARM.md`](results/JDK-ARM.md),
+where the parse-only decoders turn out to accept a public key of any length and defer the size check to
+the point of use. The pre-registered design - targets, outcome classification, hypotheses, and the
 four amendments made during construction - is in
 [`docs/EXPERIMENT-DESIGN.md`](docs/EXPERIMENT-DESIGN.md); **read that first.**
 
@@ -72,6 +75,23 @@ Six individual entry points (as pre-registered) plus three composed "parse then 
 All drive `org.bouncycastle.crypto.{params,signers,generators,kems}` - the current API - never the
 deprecated, identically-named `org.bouncycastle.pqc.crypto.*` classes (design §12, A1).
 
+**JDK arm (design amendment A5, 2026-09-04).** Six further targets, `jdk-*`, drive the same entry points in
+the JDK's own providers (JDK 24 and later: ML-KEM in `SunJCE`, ML-DSA in `SUN`; the JDK has no SLH-DSA).
+The raw key is fuzzed, as above, and wrapped in a length-correct `SubjectPublicKeyInfo` because the JDK's
+public API takes only X.509-encoded keys. ML-DSA keys and signatures are the BouncyCastle arm's own, so the
+seed corpora, and hence the mutation streams, are byte-identical between the arms. The JDK targets use the
+JDK's documented rejection rule (`InvalidKeySpecException`, `InvalidKeyException`, `SignatureException`,
+`DecapsulateException`).
+
+| Target | Kind | Input fuzzed |
+|---|---|---|
+| `jdk-ml-kem-768-decap` | decapsulate | ciphertext |
+| `jdk-ml-kem-768-pubkey-parse` | decode | raw key, SPKI-wrapped |
+| `jdk-ml-kem-768-parse-encapsulate` | decode | raw key, SPKI-wrapped |
+| `jdk-ml-dsa-65-verify` | verify | signature |
+| `jdk-ml-dsa-65-pubkey-parse` | decode | raw key, SPKI-wrapped |
+| `jdk-ml-dsa-65-parse-verify` | verify | raw key, SPKI-wrapped |
+
 ## Running
 
 ```bash
@@ -85,6 +105,13 @@ java -XX:-OmitStackTraceInFastThrow -jar target/pqc-fuzz.jar --inputs=100000
 # Coverage-guided fuzzing (expected to FAIL on 1.84 - that is the control working)
 JAZZER_FUZZ=1 mvn test -Dtest=PqcDecodeFuzzTest
 JAZZER_FUZZ=1 mvn test -Dtest=PqcDecodeFuzzTest -Dbouncycastle.version=1.84
+
+# The JDK arm (design amendment A5): the same campaign against the JDK's own providers, JDK 24 or later
+java -XX:-OmitStackTraceInFastThrow -jar target/pqc-fuzz.jar --targets=jdk --out=results/jdk25
+
+# Coverage-guided fuzzing of the JDK targets. The two parse-only harnesses fail by design within
+# seconds (the JDK accepts a wrong-length key, see A5) and are opt-in.
+JAZZER_FUZZ=1 mvn test -Dtest=PqcDecodeFuzzTest -Dpqcfuzz.jdk.parse=true
 ```
 
 `FuzzCampaign` options: `--targets=a,b`, `--inputs=N`, `--seed=N`, `--timeout-ms=N`, `--out=DIR`,

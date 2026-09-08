@@ -45,4 +45,21 @@ public final class ExpectedRejections {
                 || t instanceof RuntimeCryptoException
                 || t instanceof CryptoException;
     }
+
+    /**
+     * The same question for targets that drive the JDK's own providers (JEP 496 ML-KEM, JEP 497
+     * ML-DSA): the checked exceptions those APIs declare for malformed input. {@code KeyFactory}
+     * throws {@code InvalidKeySpecException}; {@code Signature.initVerify} and
+     * {@code KEM.newEncapsulator} throw {@code InvalidKeyException}; {@code Signature.verify} throws
+     * {@code SignatureException} for a structurally malformed signature, which is the JDK's stated
+     * policy (invalid structure throws, a well-formed but wrong signature returns false); and
+     * {@code KEM.Decapsulator.decapsulate} throws {@code DecapsulateException} for a wrong-length
+     * ciphertext. Anything else, {@code ProviderException} included, is undocumented.
+     */
+    public static boolean isDocumentedJdkRejection(Throwable t) {
+        return t instanceof java.security.spec.InvalidKeySpecException
+                || t instanceof java.security.InvalidKeyException
+                || t instanceof java.security.SignatureException
+                || t instanceof javax.crypto.DecapsulateException;
+    }
 }

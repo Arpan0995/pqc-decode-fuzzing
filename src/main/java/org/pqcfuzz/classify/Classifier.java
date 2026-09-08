@@ -33,11 +33,13 @@ public final class Classifier {
     private final TargetKind kind;
     private final List<byte[]> genuineInputs;
     private final int nominalInputLength;
+    private final java.util.function.Predicate<Throwable> documentedRejection;
 
     public Classifier(FuzzTarget target) {
         this.kind = target.kind();
         this.genuineInputs = List.copyOf(target.genuineInputs());
         this.nominalInputLength = target.nominalInputLength();
+        this.documentedRejection = target::isDocumentedRejection;
     }
 
     /**
@@ -58,7 +60,7 @@ public final class Classifier {
 
     /** Classify a call that threw. */
     public Outcome classifyThrow(Throwable t) {
-        return ExpectedRejections.isDocumentedRejection(t)
+        return documentedRejection.test(t)
                 ? Outcome.REJECTED
                 : Outcome.UNEXPECTED_EXCEPTION;
     }

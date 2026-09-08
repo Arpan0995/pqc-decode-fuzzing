@@ -20,14 +20,14 @@ import java.security.SecureRandom;
  * {@code PublicKeyFactory} hands back when an X.509 certificate is parsed — rather than the deprecated
  * {@code org.bouncycastle.pqc.crypto.mldsa} package.
  */
-final class MlDsaKeys {
+public final class MlDsaKeys {
 
     static final MLDSAParameters PARAMETERS = MLDSAParameters.ml_dsa_65;
 
-    final MLDSAPublicKeyParameters publicKey;
-    final MLDSAPrivateKeyParameters privateKey;
+    public final MLDSAPublicKeyParameters publicKey;
+    public final MLDSAPrivateKeyParameters privateKey;
 
-    MlDsaKeys(long seed) {
+    public MlDsaKeys(long seed) {
         SecureRandom keyRandom = new DeterministicSecureRandom(seed);
         MLDSAKeyPairGenerator kpg = new MLDSAKeyPairGenerator();
         kpg.init(new MLDSAKeyGenerationParameters(keyRandom, PARAMETERS));
@@ -40,7 +40,7 @@ final class MlDsaKeys {
      * Sign deterministically (init with the plain private key selects FIPS 204 rnd = 0), so the seed
      * signatures a campaign mutates are a function of the seed alone.
      */
-    byte[] sign(byte[] message) {
+    public byte[] sign(byte[] message) {
         MLDSASigner signer = new MLDSASigner();
         signer.init(true, privateKey);
         signer.update(message, 0, message.length);

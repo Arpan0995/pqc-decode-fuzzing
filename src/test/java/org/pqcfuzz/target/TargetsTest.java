@@ -1,11 +1,13 @@
 package org.pqcfuzz.target;
 
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.pqcfuzz.classify.Classifier;
 import org.pqcfuzz.classify.Outcome;
+import org.pqcfuzz.target.jdk.JdkPqc;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -38,6 +40,7 @@ class TargetsTest {
     @MethodSource("targetNames")
     @DisplayName("genuine inputs are accepted")
     void genuineInputsAreAccepted(String name) throws Exception {
+        assumeAvailable(name);
         FuzzTarget target = Targets.create(name, SEED);
         Classifier classifier = new Classifier(target);
         assertFalse(target.genuineInputs().isEmpty(), name + " declares no genuine inputs");
@@ -51,6 +54,7 @@ class TargetsTest {
     @MethodSource("targetNames")
     @DisplayName("seeds that are not genuine are cleanly rejected")
     void nonGenuineSeedsAreRejected(String name) throws Exception {
+        assumeAvailable(name);
         FuzzTarget target = Targets.create(name, SEED);
         if (target.kind() != TargetKind.VERIFY) {
             return; // Only verify targets carry seeds they are meant to refuse.
@@ -70,6 +74,7 @@ class TargetsTest {
     @MethodSource("targetNames")
     @DisplayName("seeds are well-formed and the nominal length is honest")
     void seedsAreWellFormed(String name) {
+        assumeAvailable(name);
         FuzzTarget target = Targets.create(name, SEED);
         assertFalse(target.seedCorpus().isEmpty(), name + " has no seeds to mutate");
         assertTrue(target.nominalInputLength() > 0, name + " reports a non-positive nominal length");
@@ -83,6 +88,7 @@ class TargetsTest {
     @MethodSource("targetNames")
     @DisplayName("targets are reproducible from their seed")
     void targetsAreReproducible(String name) {
+        assumeAvailable(name);
         // Every reported anomaly is replayed from the campaign seed, so identical seeds must give
         // identical keys, corpora and signatures.
         List<byte[]> first = Targets.create(name, SEED).seedCorpus();
@@ -98,6 +104,7 @@ class TargetsTest {
     @MethodSource("targetNames")
     @DisplayName("different seeds give different keys")
     void differentSeedsGiveDifferentKeys(String name) {
+        assumeAvailable(name);
         byte[] a = Targets.create(name, SEED).genuineInputs().get(0);
         byte[] b = Targets.create(name, SEED + 1).genuineInputs().get(0);
         assertFalse(Arrays.equals(a, b), name + " ignores its seed");
@@ -108,7 +115,8 @@ class TargetsTest {
     void registryIsConsistent() {
         Set<String> names = new HashSet<>(Targets.names());
         assertEquals(Targets.names().size(), names.size(), "duplicate target names");
-        assertEquals(9, names.size(), "expected the six pre-registered targets plus three composed");
+        assertEquals(15, names.size(),
+                "expected the six pre-registered targets, three composed, and six JDK (amendment A5)");
         assertThrows(IllegalArgumentException.class, () -> Targets.create("no-such-target", SEED));
     }
 
@@ -118,6 +126,9 @@ class TargetsTest {
         // The deprecated and current classes share simple names, so a stray import is invisible in
         // review and would silently move the study off the code that X.509 parsing actually reaches.
         for (String name : Targets.names()) {
+            if (name.startsWith("jdk-") && !JdkPqc.available()) {
+                continue;
+            }
             FuzzTarget target = Targets.create(name, SEED);
             try {
                 target.accepts(new byte[0]);
@@ -126,6 +137,11 @@ class TargetsTest {
             }
             assertDrivesModernApi(target);
         }
+    }
+
+    private static void assumeAvailable(String name) {
+        Assumptions.assumeTrue(!name.startsWith("jdk-") || JdkPqc.available(),
+                name + " needs a JDK with ML-DSA and ML-KEM providers (JDK 24 or later)");
     }
 
     private static void assertDrivesModernApi(FuzzTarget target) {

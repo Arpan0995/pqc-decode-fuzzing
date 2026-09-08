@@ -41,6 +41,16 @@ public final class Environment {
     }
 
     /** A one-line description of the JVM, recorded with every result. */
+    /** Which JDK providers, if any, serve ML-DSA and ML-KEM on this JVM; JDK 24 and later ship them. */
+    public static String jdkPqcProviders() {
+        try {
+            return "ML-DSA: " + java.security.KeyFactory.getInstance("ML-DSA-65").getProvider().getName()
+                    + ", ML-KEM: " + java.security.KeyFactory.getInstance("ML-KEM-768").getProvider().getName();
+        } catch (java.security.NoSuchAlgorithmException e) {
+            return "none (the jdk-* targets need JDK 24 or later)";
+        }
+    }
+
     public static String jvm() {
         return System.getProperty("java.vm.name")
                 + " " + System.getProperty("java.version")

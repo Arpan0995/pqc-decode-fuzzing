@@ -40,6 +40,7 @@ public final class ReportWriter {
         out.append("| Setting | Value |\n|---|---|\n");
         out.append("| BouncyCastle | ").append(Environment.bouncyCastleVersion()).append(" |\n");
         out.append("| JVM | ").append(Environment.jvm()).append(" |\n");
+        out.append("| JDK PQC providers | ").append(Environment.jdkPqcProviders()).append(" |\n");
         out.append("| Host | ").append(Environment.host()).append(" |\n");
         out.append("| Campaign seed | `").append(seed).append("` |\n");
         out.append("| Per-input timeout | ").append(timeoutMillis).append(" ms |\n");
@@ -105,8 +106,11 @@ public final class ReportWriter {
             out.append(" | ").append(r.anomalies().size()).append(" |\n");
         }
         out.append("\nOutcomes are as pre-registered (design §6). `REJECTED` is the *correct* response to"
-                + " malformed input — verification returning false, or a documented exception"
-                + " (`IllegalArgumentException`, `RuntimeCryptoException`, `CryptoException`)."
+                + " malformed input — verification returning false, or a documented exception under the"
+                + " rule for the provider driven: for BouncyCastle `IllegalArgumentException`,"
+                + " `RuntimeCryptoException` or `CryptoException`; for the JDK targets"
+                + " `InvalidKeySpecException`, `InvalidKeyException`, `SignatureException` or"
+                + " `DecapsulateException` (design A5)."
                 + " `UNEXPECTED_EXCEPTION` is anything else thrown, and is the primary defect class."
                 + " Throughput is exploratory and host-specific; it also carries the cost of running"
                 + " every input under a timeout watchdog.\n\n");

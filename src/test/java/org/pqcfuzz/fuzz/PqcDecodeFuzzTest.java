@@ -6,6 +6,10 @@ import org.pqcfuzz.classify.Classifier;
 import org.pqcfuzz.classify.Outcome;
 import org.pqcfuzz.target.FuzzTarget;
 import org.pqcfuzz.target.Targets;
+import org.pqcfuzz.target.jdk.JdkPqc;
+
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -114,5 +118,52 @@ class PqcDecodeFuzzTest {
     @FuzzTest(maxDuration = "2m")
     void slhDsaParseAndVerify(FuzzedDataProvider data) {
         drive("slh-dsa-sha2-128f-parse-verify", data);
+    }
+
+    // Amendment A5: the same entry points in the JDK's own providers. Skipped below JDK 24.
+
+    private static void driveJdk(String targetName, FuzzedDataProvider data) {
+        Assumptions.assumeTrue(JdkPqc.available(), "needs JDK 24 or later");
+        drive(targetName, data);
+    }
+
+    @FuzzTest(maxDuration = "2m")
+    void jdkMlKemDecap(FuzzedDataProvider data) {
+        driveJdk("jdk-ml-kem-768-decap", data);
+    }
+
+    /**
+     * Fails by design on JDK 24 and later, within seconds and on the empty input: the JDK's
+     * {@code KeyFactory} accepts a wrong-length key (design amendment A5), which the classifier
+     * scores {@code ACCEPTED}. That is the harness working, as with the 1.84 control. The behaviour
+     * is pinned by {@code JdkKeyLengthValidationTest}; this harness is opt-in
+     * ({@code -Dpqcfuzz.jdk.parse=true}) so {@code mvn test} stays green on a clean library.
+     */
+    @EnabledIfSystemProperty(named = "pqcfuzz.jdk.parse", matches = "true")
+    @FuzzTest(maxDuration = "2m")
+    void jdkMlKemPublicKeyParse(FuzzedDataProvider data) {
+        driveJdk("jdk-ml-kem-768-pubkey-parse", data);
+    }
+
+    @FuzzTest(maxDuration = "2m")
+    void jdkMlKemParseAndEncapsulate(FuzzedDataProvider data) {
+        driveJdk("jdk-ml-kem-768-parse-encapsulate", data);
+    }
+
+    @FuzzTest(maxDuration = "2m")
+    void jdkMlDsaVerify(FuzzedDataProvider data) {
+        driveJdk("jdk-ml-dsa-65-verify", data);
+    }
+
+    /** Same as {@link #jdkMlKemPublicKeyParse}: fails by design on JDK 24 and later; opt-in. */
+    @EnabledIfSystemProperty(named = "pqcfuzz.jdk.parse", matches = "true")
+    @FuzzTest(maxDuration = "2m")
+    void jdkMlDsaPublicKeyParse(FuzzedDataProvider data) {
+        driveJdk("jdk-ml-dsa-65-pubkey-parse", data);
+    }
+
+    @FuzzTest(maxDuration = "2m")
+    void jdkMlDsaParseAndVerify(FuzzedDataProvider data) {
+        driveJdk("jdk-ml-dsa-65-parse-verify", data);
     }
 }

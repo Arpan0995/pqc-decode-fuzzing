@@ -21,17 +21,17 @@ import java.security.SecureRandom;
  * {@code org.bouncycastle.pqc.crypto.mlkem} package, which BouncyCastle deprecated. See
  * {@link org.pqcfuzz.target.FuzzTarget} for why that choice decides what this study is measuring.
  */
-final class MlKemKeys {
+public final class MlKemKeys {
 
     static final MLKEMParameters PARAMETERS = MLKEMParameters.ml_kem_768;
 
-    final MLKEMPublicKeyParameters publicKey;
-    final MLKEMPrivateKeyParameters privateKey;
-    final MLKEMExtractor extractor;
+    public final MLKEMPublicKeyParameters publicKey;
+    public final MLKEMPrivateKeyParameters privateKey;
+    public final MLKEMExtractor extractor;
 
     private final SecureRandom encapRandom;
 
-    MlKemKeys(long seed) {
+    public MlKemKeys(long seed) {
         SecureRandom keyRandom = new DeterministicSecureRandom(seed);
         MLKEMKeyPairGenerator kpg = new MLKEMKeyPairGenerator();
         kpg.init(new MLKEMKeyGenerationParameters(keyRandom, PARAMETERS));
@@ -45,7 +45,7 @@ final class MlKemKeys {
     }
 
     /** One valid encapsulation (shared secret + ciphertext) against the public key. */
-    SecretWithEncapsulation encapsulate() {
+    public SecretWithEncapsulation encapsulate() {
         return new MLKEMGenerator(encapRandom).generateEncapsulated(publicKey);
     }
 }

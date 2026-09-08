@@ -1,5 +1,11 @@
 package org.pqcfuzz.target;
 
+import org.pqcfuzz.target.jdk.JdkMlDsa65ParseAndVerifyTarget;
+import org.pqcfuzz.target.jdk.JdkMlDsa65PublicKeyParseTarget;
+import org.pqcfuzz.target.jdk.JdkMlDsa65VerifyTarget;
+import org.pqcfuzz.target.jdk.JdkMlKem768DecapTarget;
+import org.pqcfuzz.target.jdk.JdkMlKem768ParseAndEncapsulateTarget;
+import org.pqcfuzz.target.jdk.JdkMlKem768PublicKeyParseTarget;
 import org.pqcfuzz.target.mldsa.MlDsa65ParseAndVerifyTarget;
 import org.pqcfuzz.target.mldsa.MlDsa65PublicKeyParseTarget;
 import org.pqcfuzz.target.mldsa.MlDsa65VerifyTarget;
@@ -38,6 +44,14 @@ public final class Targets {
         register("ml-kem-768-parse-encapsulate", MlKem768ParseAndEncapsulateTarget::new);
         register("ml-dsa-65-parse-verify", MlDsa65ParseAndVerifyTarget::new);
         register("slh-dsa-sha2-128f-parse-verify", SlhDsaParseAndVerifyTarget::new);
+        // Amendment A5: the same entry points in the JDK's own providers (JDK 24 and later). The JDK
+        // has no SLH-DSA, so there are six, not nine.
+        register("jdk-ml-kem-768-decap", JdkMlKem768DecapTarget::new);
+        register("jdk-ml-kem-768-pubkey-parse", JdkMlKem768PublicKeyParseTarget::new);
+        register("jdk-ml-dsa-65-verify", JdkMlDsa65VerifyTarget::new);
+        register("jdk-ml-dsa-65-pubkey-parse", JdkMlDsa65PublicKeyParseTarget::new);
+        register("jdk-ml-kem-768-parse-encapsulate", JdkMlKem768ParseAndEncapsulateTarget::new);
+        register("jdk-ml-dsa-65-parse-verify", JdkMlDsa65ParseAndVerifyTarget::new);
     }
 
     private Targets() {
@@ -47,9 +61,19 @@ public final class Targets {
         FACTORIES.put(name, factory);
     }
 
-    /** All target names, in a stable order. */
+    /** All target names, in a stable order: the nine BouncyCastle targets, then the six JDK ones. */
     public static List<String> names() {
         return List.copyOf(FACTORIES.keySet());
+    }
+
+    /** The nine BouncyCastle targets: the pre-registered six plus the three composed paths. */
+    public static List<String> bcNames() {
+        return names().stream().filter(n -> !n.startsWith("jdk-")).toList();
+    }
+
+    /** The six targets that drive the JDK's own providers (amendment A5); they need JDK 24 or later. */
+    public static List<String> jdkNames() {
+        return names().stream().filter(n -> n.startsWith("jdk-")).toList();
     }
 
     /**

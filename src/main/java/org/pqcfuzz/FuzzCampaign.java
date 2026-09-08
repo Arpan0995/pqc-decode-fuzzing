@@ -21,7 +21,7 @@ import java.util.List;
  * <pre>{@code
  * java -XX:-OmitStackTraceInFastThrow -jar target/pqc-fuzz.jar [options]
  *
- *   --targets=a,b     targets to run (default: all)
+ *   --targets=a,b     targets to run, or bc | jdk | all (default: bc, the nine BouncyCastle targets)
  *   --inputs=N        inputs per target (default: 100000)
  *   --seed=N          campaign seed; fixes keys, corpus and mutations (default: 20260717)
  *   --timeout-ms=N    per-input budget (default: 5000)
@@ -56,6 +56,7 @@ public final class FuzzCampaign {
 
         System.out.printf("pqc-decode-fuzzing: BouncyCastle %s on %s%n",
                 Environment.bouncyCastleVersion(), Environment.jvm());
+        System.out.printf("JDK PQC providers: %s%n", Environment.jdkPqcProviders());
         System.out.printf("%d target(s), %,d inputs each, seed %d, %d ms timeout%n%n",
                 options.targets().size(), options.inputs(), options.seed(), options.timeoutMillis());
 
@@ -63,7 +64,14 @@ public final class FuzzCampaign {
         List<TargetResult> results = new ArrayList<>(options.targets().size());
         for (String name : options.targets()) {
             System.out.println("  " + name);
-            FuzzTarget target = Targets.create(name, options.seed());
+            FuzzTarget target;
+            try {
+                target = Targets.create(name, options.seed());
+            } catch (IllegalStateException e) {
+                System.err.println("error: " + name + ": " + e.getMessage());
+                System.exit(2);
+                return;
+            }
             TargetResult result = runner.run(target, options.seed(), options.inputs());
             results.add(result);
             System.out.printf("    done: %,d inputs at %,.0f/s, %d distinct anomal%s%n",
@@ -103,7 +111,7 @@ public final class FuzzCampaign {
         private static final long DEFAULT_TIMEOUT_MS = 5_000;
 
         static Options parse(String[] args) {
-            List<String> targets = Targets.names();
+            List<String> targets = Targets.bcNames();
             long inputs = DEFAULT_INPUTS;
             long seed = DEFAULT_SEED;
             long timeoutMillis = DEFAULT_TIMEOUT_MS;
@@ -131,6 +139,12 @@ public final class FuzzCampaign {
         }
 
         private static List<String> parseTargets(String value) {
+            switch (value) {
+                case "bc": return Targets.bcNames();
+                case "jdk": return Targets.jdkNames();
+                case "all": return Targets.names();
+                default: break;
+            }
             List<String> known = Targets.names();
             List<String> requested = List.of(value.split(","));
             for (String name : requested) {
