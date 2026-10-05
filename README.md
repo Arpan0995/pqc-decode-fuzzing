@@ -19,8 +19,12 @@ where the parse-only decoders turn out to accept a public key of any length and 
 the point of use. Since 2026-09-21 (design amendment A6) the campaigns are repeated under ten further
 seeds and on BouncyCastle 1.86, the control is measured across seeds and operators, a graded synthetic
 control measures how rare a fault each method can still find, and the coverage-guided harnesses run in
-a corrected configuration: see [`results/a6/A6-RESULTS.md`](results/a6/A6-RESULTS.md). The
-pre-registered design - targets, outcome classification, hypotheses, and its six amendments - is in
+a corrected configuration: see [`results/a6/A6-RESULTS.md`](results/a6/A6-RESULTS.md). Since
+2026-10-05 (design amendment A7) a hang control shows that the watchdog scores a planted non-terminating
+input, a per-input comparison of the two arms shows that both implementations decide every shared input
+the same way, and the coverage-guided harnesses run five trials per release: see
+[`results/a7/A7-RESULTS.md`](results/a7/A7-RESULTS.md). The
+pre-registered design - targets, outcome classification, hypotheses, and its seven amendments - is in
 [`docs/EXPERIMENT-DESIGN.md`](docs/EXPERIMENT-DESIGN.md); **read that first.**
 
 ## The instrument finds real defects
@@ -122,6 +126,15 @@ java -cp target/pqc-fuzz.jar org.pqcfuzz.SeedExport src/test/resources/org/pqcfu
 java -XX:-OmitStackTraceInFastThrow -jar target/pqc-fuzz.jar --targets=seeded-guard-k12 --out=/tmp/guard
 JAZZER_FUZZ=1 mvn test -Dtest='SeededGuardFuzzTest#seededGuardK32'
 
+# The hang control (design amendment A7): the same guard with a 20-second busy loop instead of an exception
+java -XX:-OmitStackTraceInFastThrow -jar target/pqc-fuzz.jar --targets=seeded-hang-k12 --no-minimize --out=/tmp/hang
+
+# Per-input comparison of the two arms (design amendment A7), JDK 24 or later
+java -XX:-OmitStackTraceInFastThrow -cp target/pqc-fuzz.jar org.pqcfuzz.run.ArmDiff --out=/tmp/arm-diff
+
+# Five two-minute coverage-guided trials of every BouncyCastle harness against one version (design amendment A7)
+scripts/coverage-guided-trials.sh 1.85 /tmp/trials-bc185
+
 # The JDK arm (design amendment A5): the same campaign against the JDK's own providers, JDK 24 or later
 java -XX:-OmitStackTraceInFastThrow -jar target/pqc-fuzz.jar --targets=jdk --out=results/jdk25
 
@@ -156,16 +169,17 @@ for throughput; robustness findings are host-independent.
 ```
 docs/EXPERIMENT-DESIGN.md   Pre-registered design + amendments (read this first)
 src/main/java/org/pqcfuzz/
-  target/                   The nine BouncyCastle targets, the six JDK targets, the synthetic control, the registry
+  target/                   The nine BouncyCastle targets, the six JDK targets, the synthetic controls, the registry
   SeedExport.java           Writes each target's genuine inputs as seeds for the coverage-guided harnesses
   mutate/                   Mutation strategies and the generator
   classify/                 Outcome, the documented-rejection whitelist, anomaly signatures
-  run/                      Campaign runner, per-input timeouts, reproducer minimization
+  run/                      Campaign runner, per-input timeouts, reproducer minimization, the arm comparison
   report/                   Markdown report, hypothesis scoring, corpus writer
 src/test/java/org/pqcfuzz/
   fuzz/                     Jazzer @FuzzTest harnesses
   control/                  The 1.84/1.85 control, as an executable specification
 results/                    Campaign results and curated reproducers
+scripts/                    Driver for the repeated coverage-guided trials (A7)
 ```
 
 ## License

@@ -4,7 +4,7 @@
 Decode and Verify Paths*
 
 **Author:** Arpan Sharma
-**Status:** Design v0.3 - pre-registration of research questions, hypotheses, and method, with six
+**Status:** Design v0.4 - pre-registration of research questions, hypotheses, and method, with six
 amendments recorded in §12. A1 to A4 were made during instrument construction, before any results
 were collected or reported; A5 and A6 are dated extensions, each written before its own runs. §1 - §11
 are otherwise as pre-registered.
@@ -175,6 +175,18 @@ maintainers before/at publication (responsible disclosure); the repository recor
 
 ## 12. Amendments to the pre-registration
 
+**Version under test (recorded 2026-10-05).** The scaffold of 2026-07-16 (commit `d6a7528`) registered
+BouncyCastle 1.84 as the version under test, in the heading of the target table and in the
+reproducibility and threats sections. BouncyCastle 1.85 had reached Maven Central on 2026-07-12, four
+days earlier. The construction-time smoke run found that the 1.84 ML-DSA public-key constructor accepts
+an encoding of any length of 33 bytes or more and that 1.85 rejects wrong lengths; amendments A2 and A3
+below were made so that the instrument could see that defect, 1.85 became the version under test, and
+1.84 was retained as the positive control (§13). As first registered, the six targets and the original
+oracle would have reported 1.84 clean. The switch was not recorded as an amendment at the time; it is
+recorded here. The public history carries the scaffold and then a single commit (`93d207d`, 2026-07-17)
+with the instrument, A1 to A4 and the 1.85 and 1.84 results together, so the timing of A1 to A4,
+like that of A6 and A7, rests on this record and not on a public timestamp.
+
 Four changes were made while building the instrument, before any results were collected, and a fifth
 (A5) was added on 2026-09-04 to extend the study to a second implementation. Each is recorded here with
 what prompted it, because a pre-registration that is quietly edited is worth nothing. None was made in
@@ -339,7 +351,12 @@ seeds. (3) *Control.* The two ML-DSA targets that carry the 1.84 control
 (`ml-dsa-65-pubkey-parse`, `ml-dsa-65-parse-verify`) are run against 1.84 under the same ten
 further seeds. (4) *Coverage-guided time to detection.* The Jazzer harness for the composed ML-DSA
 target is run against 1.84 ten times from an empty corpus and the time to the first failure is
-recorded. (5) *A graded synthetic control* (added to this amendment on 2026-09-21, before it ran).
+recorded. [Erratum, recorded 2026-10-05: as run, this was both control harnesses, the parse-only and
+the composed ML-DSA target, ten trials each, started from the four genuine seeds without the
+over-length seed; see `results/a6/coverage-guided/control-trials.md`. The change was made when the
+runs were set up, because a harness started from an empty corpus cannot generate a correctly sized
+key within libFuzzer's default length limit, the failure that the corrected coverage-guided
+configuration addresses, and it was not written into this amendment at the time.] (5) *A graded synthetic control* (added to this amendment on 2026-09-21, before it ran).
 `seeded-guard-k<K>` is the library's ML-DSA-65 public-key decoder followed by one planted fault, an
 `ArrayIndexOutOfBoundsException` that fires only when the input has the correct length, parses, and
 holds the complement of the genuine key's bits in the *K* bits starting at byte 1000. Raising *K*
@@ -404,6 +421,46 @@ second library's bugs to disentangle from BouncyCastle's.
 Because 1.85 fixes the defect, there is nothing to disclose: the finding's value is in validating the
 instrument, not in reporting a live vulnerability. Results are in `results/control-bc184/`, and the
 behaviour is pinned as an executable specification in `MlDsaKeyLengthValidationTest`.
+
+
+### A7 - A hang control, a per-input comparison of the arms, and repeated coverage-guided trials (added 2026-10-05)
+
+**When.** Written on 2026-10-05, after the A6 results were written up and before any run described
+here. Nothing here can change a pre-registered verdict; everything here is exploratory in the sense of
+A6.
+
+**What prompted it.** An outside reading of the manuscript asked three questions the record could not
+answer. (1) H4 ("no input hangs") was scored "supported" by a watchdog never shown to detect a hang:
+both controls end in an exception. (2) The statement that the two implementations reach the same final
+decision on every shared input rested on equal aggregate counts, not on a per-input comparison. (3) The
+coverage-guided arm reported one two-minute trial per harness and release, in a study that cites the
+single-trial objection against others.
+
+**Runs.** (1) *Hang control.* `seeded-hang-k<K>` is the library's ML-DSA-65 public-key decoder followed
+by a planted busy loop of 20 seconds that runs only when the input has the correct length, parses, and
+holds the complement of the genuine key's bits in the *K* bits starting at byte 1000: the guard of
+`seeded-guard-k<K>`, unchanged. It is run at *K* = 12 under the eleven seeds of A6 with
+`--no-minimize` (a timed-out input cannot be shrunk without re-running the hang) and every other
+parameter as before. It is unregistered, like `seeded-guard-k<K>`, and never part of `bc`, `jdk` or
+`all`. (2) *Per-input comparison.* `org.pqcfuzz.run.ArmDiff` drives the mutation stream of the original
+seed, built exactly as the campaign builds it, through both members of each of the five target pairs
+whose seed corpora are byte-identical between the arms, and records the pair of outcomes for every
+input, on OpenJDK 25.0.2 with BouncyCastle 1.85. The decapsulation pair is excluded because its JDK key
+pair is the JDK's own. (3) *Repeated coverage-guided trials.* Each of the nine BouncyCastle harnesses
+is run five times for two minutes against 1.85 and five times against 1.86, in the corrected
+configuration, from the committed seeds, each trial in a fresh JVM with no generated corpus carried
+over; the libFuzzer status lines are kept so that the execution count at which coverage last grew can
+be read off.
+
+**Expectations.** (1) Under each seed the hang control records `TIMEOUT` inputs equal in number, and
+equal in the position of the first, to the `UNEXPECTED_EXCEPTION` inputs that `seeded-guard-k12`
+recorded under the same seed (ten seeds with one to five such inputs, one seed with none), and records
+nothing else. (2) Zero disagreements on the three use-path pairs. On the two parse-only pairs the
+disagreements are exactly the inputs BouncyCastle rejected and the JDK did not: 62,688 for the ML-KEM
+key parse (29,956 wrong-length inputs the JDK scored `ACCEPTED` and 32,732 correct-length inputs it
+scored `OK`) and 29,826 for the ML-DSA key parse (all wrong-length). (3) No anomaly in any trial; the
+final edge count of each harness is the same in all five trials of a release; execution counts vary
+with host load.
 
 ---
 

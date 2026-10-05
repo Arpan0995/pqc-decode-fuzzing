@@ -1,6 +1,7 @@
 package org.pqcfuzz.target;
 
 import org.pqcfuzz.target.control.SeededGuardTarget;
+import org.pqcfuzz.target.control.SeededHangTarget;
 import org.pqcfuzz.target.jdk.JdkMlDsa65ParseAndVerifyTarget;
 import org.pqcfuzz.target.jdk.JdkMlDsa65PublicKeyParseTarget;
 import org.pqcfuzz.target.jdk.JdkMlDsa65VerifyTarget;
@@ -84,6 +85,10 @@ public final class Targets {
      * @throws IllegalArgumentException if no such target is registered
      */
     public static FuzzTarget create(String name, long seed) {
+        if (name.startsWith(SeededHangTarget.PREFIX)) {
+            // The synthetic hang control of amendment A7; unregistered for the same reason as the guard.
+            return new SeededHangTarget(Integer.parseInt(name.substring(SeededHangTarget.PREFIX.length())), seed);
+        }
         if (name.startsWith(SeededGuardTarget.PREFIX)) {
             // The synthetic control of amendment A6. Deliberately not registered: it must never run as
             // part of "bc", "jdk" or "all", whose results are read as evidence about a library.

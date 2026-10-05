@@ -6,6 +6,7 @@ import org.pqcfuzz.report.ReportWriter;
 import org.pqcfuzz.run.CampaignRunner;
 import org.pqcfuzz.run.TargetResult;
 import org.pqcfuzz.target.control.SeededGuardTarget;
+import org.pqcfuzz.target.control.SeededHangTarget;
 import org.pqcfuzz.target.FuzzTarget;
 import org.pqcfuzz.target.Targets;
 
@@ -149,7 +150,8 @@ public final class FuzzCampaign {
             List<String> known = Targets.names();
             List<String> requested = List.of(value.split(","));
             for (String name : requested) {
-                if (!known.contains(name) && !name.startsWith(SeededGuardTarget.PREFIX)) {
+                if (!known.contains(name) && !name.startsWith(SeededGuardTarget.PREFIX)
+                        && !name.startsWith(SeededHangTarget.PREFIX)) {
                     throw new IllegalArgumentException(
                             "unknown target '" + name + "'; known: " + String.join(", ", known));
                 }

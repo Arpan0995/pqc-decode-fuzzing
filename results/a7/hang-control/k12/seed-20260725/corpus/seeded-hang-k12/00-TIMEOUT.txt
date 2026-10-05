@@ -1,0 +1,18 @@
+target:      seeded-hang-k12
+outcome:     TIMEOUT
+exception:   -
+message:     
+top frame:   -
+hits:        1
+found via:   RANDOM of seed 0
+input size:  1952 bytes (nominal 1952)
+
+input (hex, first 256 of 1952 bytes):
+  0000  0cda76d0eb96b4844855662ad861d7ba24f2668271b4d32ab74583169cada564
+  0020  855996b9d7e469c083e6ede75661236284a409c066d58a0fd5f91607da919c08
+  0040  f0cfd8d9a6b1c1bfc82630d110f176aa4b61d3f1e9e0561fa2417029b2a6c166
+  0060  6c2a729138faa78e93c3d51096f8954515c05fedd0a840dd773ce8f4f5b50b55
+  0080  d5033ea075a592ec088d2cf4acb8c6eb0c49cedb3508070a9fcdc051e68044ad
+  00a0  aeaed1395e4f36fbc3863e8f48caa31868ac8a3c03df26bf6cb1855eab56ec3c
+  00c0  58d09278fcc9b4e914448f90d016d1c85f91134d42ff6db19450acf01a47c4df
+  00e0  5d04e7b8ced2fdf29a8268161031278c3dd14a0ffb8017c0a70cd74a10750574

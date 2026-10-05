@@ -1,0 +1,189 @@
+INFO: Loaded 287 hooks from com.code_intelligence.jazzer.runtime.TraceCmpHooks
+INFO: Loaded 5 hooks from com.code_intelligence.jazzer.runtime.TraceDivHooks
+INFO: Loaded 2 hooks from com.code_intelligence.jazzer.runtime.TraceIndirHooks
+INFO: Loaded 4 hooks from com.code_intelligence.jazzer.runtime.NativeLibHooks
+INFO: Loaded 2 hooks from com.code_intelligence.jazzer.sanitizers.ClojureLangHooks
+INFO: Loaded 5 hooks from com.code_intelligence.jazzer.sanitizers.Deserialization
+INFO: Loaded 5 hooks from com.code_intelligence.jazzer.sanitizers.ExpressionLanguageInjection
+INFO: Loaded 70 hooks from com.code_intelligence.jazzer.sanitizers.LdapInjection
+INFO: Loaded 46 hooks from com.code_intelligence.jazzer.sanitizers.NamingContextLookup
+INFO: Loaded 1 hooks from com.code_intelligence.jazzer.sanitizers.OsCommandInjection
+INFO: Loaded 48 hooks from com.code_intelligence.jazzer.sanitizers.ReflectiveCall
+INFO: Loaded 8 hooks from com.code_intelligence.jazzer.sanitizers.RegexInjection
+INFO: Loaded 16 hooks from com.code_intelligence.jazzer.sanitizers.RegexRoadblocks
+INFO: Loaded 12 hooks from com.code_intelligence.jazzer.sanitizers.ScriptEngineInjection
+INFO: Loaded 3 hooks from com.code_intelligence.jazzer.sanitizers.ServerSideRequestForgery
+INFO: Loaded 19 hooks from com.code_intelligence.jazzer.sanitizers.SqlInjection
+INFO: Loaded 6 hooks from com.code_intelligence.jazzer.sanitizers.XPathInjection
+INFO: Instrumented org.pqcfuzz.classify.Classifier (took 68 ms, size +26%)
+INFO: Instrumented org.pqcfuzz.target.FuzzTarget (took 0 ms, size +12%)
+INFO: Instrumented org.pqcfuzz.classify.Outcome (took 4 ms, size +13%)
+INFO: Instrumented org.pqcfuzz.fuzz.PqcDecodeFuzzTest (took 13 ms, size +12%)
+INFO: Instrumented org.pqcfuzz.target.Targets (took 11 ms, size +19%)
+INFO: Instrumented org.pqcfuzz.target.mlkem.MlKem768DecapTarget (took 5 ms, size +13%)
+INFO: Instrumented org.pqcfuzz.target.mlkem.MlKem768PublicKeyParseTarget (took 4 ms, size +15%)
+INFO: Instrumented org.pqcfuzz.target.mldsa.MlDsa65VerifyTarget (took 2 ms, size +11%)
+INFO: Instrumented org.bouncycastle.crypto.CipherParameters (took 0 ms, size +0%)
+INFO: Instrumented org.pqcfuzz.target.mldsa.MlDsa65PublicKeyParseTarget (took 2 ms, size +15%)
+INFO: Instrumented org.pqcfuzz.target.slhdsa.SlhDsaVerifyTarget (took 1 ms, size +10%)
+INFO: Instrumented org.pqcfuzz.target.slhdsa.SlhDsaPublicKeyParseTarget (took 1 ms, size +14%)
+INFO: Instrumented org.pqcfuzz.target.mlkem.MlKem768ParseAndEncapsulateTarget (took 2 ms, size +11%)
+INFO: Instrumented org.bouncycastle.crypto.params.AsymmetricKeyParameter (took 0 ms, size +32%)
+INFO: Instrumented org.bouncycastle.crypto.params.MLKEMPublicKeyParameters (took 1 ms, size +22%)
+INFO: Instrumented org.bouncycastle.crypto.params.MLKEMKeyParameters (took 0 ms, size +23%)
+INFO: Instrumented org.pqcfuzz.util.DeterministicSecureRandom (took 1 ms, size +24%)
+INFO: Instrumented org.pqcfuzz.target.mldsa.MlDsa65ParseAndVerifyTarget (took 1 ms, size +10%)
+INFO: Instrumented org.pqcfuzz.target.slhdsa.SlhDsaParseAndVerifyTarget (took 2 ms, size +10%)
+INFO: Instrumented org.pqcfuzz.target.jdk.JdkMlKem768DecapTarget (took 2 ms, size +12%)
+INFO: Instrumented org.pqcfuzz.target.jdk.JdkMlKem768PublicKeyParseTarget (took 2 ms, size +11%)
+INFO: Instrumented org.pqcfuzz.target.jdk.JdkMlDsa65VerifyTarget (took 2 ms, size +10%)
+INFO: Instrumented org.pqcfuzz.target.jdk.JdkMlDsa65PublicKeyParseTarget (took 2 ms, size +12%)
+INFO: Instrumented org.pqcfuzz.target.jdk.JdkMlKem768ParseAndEncapsulateTarget (took 3 ms, size +9%)
+INFO: Instrumented org.pqcfuzz.target.jdk.JdkMlDsa65ParseAndVerifyTarget (took 3 ms, size +9%)
+INFO: Instrumented org.pqcfuzz.target.slhdsa.SlhDsaKeys (took 1 ms, size +7%)
+INFO: Instrumented org.bouncycastle.crypto.KeyGenerationParameters (took 1 ms, size +19%)
+INFO: Instrumented org.bouncycastle.crypto.params.SLHDSAKeyGenerationParameters (took 0 ms, size +20%)
+INFO: Instrumented org.bouncycastle.crypto.params.SLHDSAParameters (took 3 ms, size +7%)
+INFO: Instrumented org.bouncycastle.crypto.params.SLHDSAParameters$SLHDSAEngineProvider (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.crypto.params.SLHDSAParameters$Sha2EngineProvider (took 1 ms, size +12%)
+INFO: Instrumented org.bouncycastle.crypto.signers.slhdsa.SLHDSAEngine (took 3 ms, size +10%)
+INFO: Instrumented org.bouncycastle.crypto.signers.slhdsa.SLHDSAEngine$Sha2Engine (took 4 ms, size +9%)
+INFO: Instrumented org.bouncycastle.crypto.params.SLHDSAParameters$Shake256EngineProvider (took 1 ms, size +12%)
+INFO: Instrumented org.bouncycastle.crypto.signers.slhdsa.SLHDSAEngine$Shake256Engine (took 3 ms, size +12%)
+INFO: Instrumented org.bouncycastle.crypto.generators.SLHDSAKeyPairGenerator (took 1 ms, size +8%)
+INFO: Instrumented org.bouncycastle.crypto.AsymmetricCipherKeyPairGenerator (took 0 ms, size +0%)
+INFO: New number of coverage counters: 1024
+INFO: Instrumented org.bouncycastle.crypto.CryptoServicesRegistrar (took 8 ms, size +12%)
+INFO: Instrumented org.bouncycastle.crypto.CryptoServicesPermission (took 2 ms, size +72%)
+INFO: Instrumented org.bouncycastle.crypto.SecureRandomProvider (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.crypto.CryptoServicesConstraints (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.crypto.CryptoServicesRegistrar$ThreadLocalSecureRandomProvider (took 1 ms, size +13%)
+INFO: Instrumented org.bouncycastle.crypto.CryptoServicesRegistrar$1 (took 0 ms, size +24%)
+INFO: Instrumented org.bouncycastle.crypto.params.DSAParameters (took 2 ms, size +66%)
+INFO: Instrumented org.bouncycastle.crypto.params.DSAValidationParameters (took 1 ms, size +38%)
+INFO: Instrumented org.bouncycastle.util.encoders.Hex (took 1 ms, size +13%)
+INFO: Instrumented org.bouncycastle.util.encoders.DecoderException (took 0 ms, size +27%)
+INFO: Instrumented org.bouncycastle.util.encoders.EncoderException (took 0 ms, size +27%)
+INFO: Instrumented org.bouncycastle.util.encoders.HexEncoder (took 2 ms, size +37%)
+INFO: Instrumented org.bouncycastle.util.encoders.Encoder (took 0 ms, size +0%)
+INFO: New number of coverage counters: 2048
+INFO: Instrumented org.bouncycastle.util.Arrays (took 13 ms, size +34%)
+INFO: Instrumented org.bouncycastle.crypto.CryptoServicesRegistrar$Property (took 1 ms, size +10%)
+INFO: Instrumented org.bouncycastle.asn1.x9.X9ECParameters (took 1 ms, size +12%)
+INFO: Instrumented org.bouncycastle.asn1.x9.X9ObjectIdentifiers (took 0 ms, size +3%)
+INFO: Instrumented org.bouncycastle.asn1.ASN1Object (took 0 ms, size +30%)
+INFO: Instrumented org.bouncycastle.asn1.ASN1Encodable (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.util.Encodable (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.crypto.params.DHParameters (took 1 ms, size +39%)
+INFO: Instrumented org.bouncycastle.crypto.params.DHValidationParameters (took 0 ms, size +45%)
+INFO: Instrumented org.bouncycastle.crypto.params.SLHDSAPrivateKeyParameters (took 0 ms, size +13%)
+INFO: Instrumented org.bouncycastle.crypto.params.SLHDSAKeyParameters (took 0 ms, size +22%)
+INFO: Instrumented org.bouncycastle.crypto.params.SLHDSAPublicKeyParameters (took 0 ms, size +25%)
+INFO: Instrumented org.bouncycastle.crypto.DerivationParameters (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.crypto.Digest (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.crypto.digests.SHA256Digest (took 7 ms, size +10%)
+INFO: Instrumented org.bouncycastle.crypto.SavableDigest (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.crypto.ExtendedDigest (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.crypto.digests.EncodableDigest (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.crypto.EncodableService (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.util.Memoable (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.crypto.digests.GeneralDigest (took 3 ms, size +23%)
+INFO: Instrumented org.bouncycastle.crypto.CryptoServicePurpose (took 1 ms, size +8%)
+INFO: Instrumented org.bouncycastle.crypto.digests.Utils (took 0 ms, size +10%)
+INFO: Instrumented org.bouncycastle.crypto.CryptoServiceProperties (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.crypto.digests.Utils$DefaultPropertiesWithPRF (took 0 ms, size +12%)
+INFO: Instrumented org.bouncycastle.crypto.macs.HMac (took 1 ms, size +19%)
+INFO: Instrumented org.bouncycastle.crypto.Mac (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.util.Integers (took 2 ms, size +30%)
+INFO: Instrumented org.bouncycastle.crypto.generators.MGF1BytesGenerator (took 0 ms, size +26%)
+INFO: Instrumented org.bouncycastle.crypto.DerivationFunction (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.crypto.OutputLengthException (took 0 ms, size +46%)
+INFO: Instrumented org.bouncycastle.crypto.DataLengthException (took 0 ms, size +39%)
+INFO: Instrumented org.bouncycastle.crypto.RuntimeCryptoException (took 0 ms, size +42%)
+INFO: Instrumented org.bouncycastle.util.Pack (took 5 ms, size +24%)
+INFO: Instrumented org.bouncycastle.crypto.AsymmetricCipherKeyPair (took 0 ms, size +13%)
+INFO: Instrumented org.bouncycastle.crypto.signers.slhdsa.HT (took 1 ms, size +15%)
+INFO: Instrumented org.bouncycastle.crypto.signers.slhdsa.WotsPlus (took 1 ms, size +21%)
+INFO: Instrumented org.bouncycastle.crypto.signers.slhdsa.ADRS (took 2 ms, size +9%)
+INFO: Instrumented org.bouncycastle.crypto.signers.slhdsa.NodeEntry (took 0 ms, size +37%)
+INFO: Instrumented org.bouncycastle.crypto.params.SLHDSAPrivateKeyParameters$SK (took 0 ms, size +17%)
+INFO: Instrumented org.bouncycastle.crypto.params.SLHDSAPrivateKeyParameters$PK (took 0 ms, size +17%)
+INFO: Instrumented org.bouncycastle.crypto.signers.SLHDSASigner (took 1 ms, size +14%)
+INFO: Instrumented org.bouncycastle.pqc.crypto.MessageSigner (took 0 ms, size +0%)
+INFO: Instrumented org.bouncycastle.crypto.params.ParametersWithContext (took 0 ms, size +23%)
+INFO: Instrumented org.bouncycastle.crypto.params.ParametersWithRandom (took 0 ms, size +13%)
+INFO: Instrumented org.bouncycastle.crypto.signers.slhdsa.Fors (took 1 ms, size +16%)
+INFO: Instrumented org.bouncycastle.crypto.params.KeyParameter (took 0 ms, size +27%)
+INFO: Instrumented org.bouncycastle.crypto.params.MGFParameters (took 0 ms, size +23%)
+INFO: Instrumented org.bouncycastle.util.Bytes (took 0 ms, size +35%)
+INFO: Instrumented org.bouncycastle.crypto.signers.slhdsa.IndexedDigest (took 0 ms, size +32%)
+INFO: Instrumented org.bouncycastle.crypto.signers.slhdsa.SIG_FORS (took 0 ms, size +31%)
+INFO: Instrumented org.bouncycastle.crypto.signers.slhdsa.SIG_XMSS (took 0 ms, size +31%)
+INFO: Instrumented org.pqcfuzz.target.TargetKind (took 1 ms, size +12%)
+INFO: Instrumented org.bouncycastle.crypto.signers.slhdsa.SIG (took 0 ms, size +25%)
+INFO: found LLVMFuzzerCustomMutator (0x109bb3038). Disabling -len_control by default.
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1868234091
+INFO: using inputs from: <repo>/.cifuzz-corpus/org.pqcfuzz.fuzz.PqcDecodeFuzzTest/slhDsaVerify
+INFO: using inputs from: <repo>/target/test-classes/org/pqcfuzz/fuzz/PqcDecodeFuzzTestInputs/slhDsaVerify
+INFO: using inputs from: /var/folders/m8/hjsd0821793bcvxlpgdpt23r0000gn/T/jazzer-java-seeds12859954710282680755
+INFO: Loaded 3 modules   (2048 inline 8-bit counters): 512 [0x7b6ae3c000, 0x7b6ae3c200), 512 [0x7b6ae3c200, 0x7b6ae3c400), 1024 [0x7b6ae3c400, 0x7b6ae3c800), 
+INFO: Loaded 3 PC tables (2048 PCs): 512 [0x1055fc190,0x1055fe190), 512 [0x7b698d8000,0x7b698da000), 1024 [0x7b6fe9c000,0x7b6fea0000), 
+INFO:        0 files found in <repo>/.cifuzz-corpus/org.pqcfuzz.fuzz.PqcDecodeFuzzTest/slhDsaVerify
+INFO:        4 files found in <repo>/target/test-classes/org/pqcfuzz/fuzz/PqcDecodeFuzzTestInputs/slhDsaVerify
+INFO:        0 files found in /var/folders/m8/hjsd0821793bcvxlpgdpt23r0000gn/T/jazzer-java-seeds12859954710282680755
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 17152 bytes
+INFO: seed corpus: files: 4 min: 17088b max: 17152b total: 68416b rss: 1115Mb
+#5	INITED cov: 196 ft: 251 corp: 3/50Kb exec/s: 0 rss: 1115Mb
+#13	REDUCE cov: 196 ft: 251 corp: 3/41Kb lim: 17152 exec/s: 0 rss: 1115Mb L: 8811/17088 MS: 6 ChangeBit-Custom-ShuffleBytes-Custom-CrossOver-Custom-
+#19	NEW    cov: 196 ft: 259 corp: 4/58Kb lim: 17152 exec/s: 0 rss: 1115Mb L: 17088/17088 MS: 2 ShuffleBytes-Custom-
+#20	NEW    cov: 196 ft: 276 corp: 5/75Kb lim: 17152 exec/s: 0 rss: 1115Mb L: 17088/17088 MS: 2 ShuffleBytes-Custom-
+#21	REDUCE cov: 196 ft: 276 corp: 5/71Kb lim: 17152 exec/s: 0 rss: 1115Mb L: 5032/17088 MS: 2 CrossOver-Custom-
+#22	REDUCE cov: 196 ft: 276 corp: 5/71Kb lim: 17152 exec/s: 0 rss: 1115Mb L: 4809/17088 MS: 2 CrossOver-Custom-
+#28	NEW    cov: 196 ft: 282 corp: 6/88Kb lim: 17152 exec/s: 0 rss: 1115Mb L: 17088/17088 MS: 2 ChangeBit-Custom-
+#59	NEW    cov: 196 ft: 291 corp: 7/104Kb lim: 17152 exec/s: 0 rss: 1115Mb L: 17088/17088 MS: 2 CopyPart-Custom-
+#76	NEW    cov: 196 ft: 292 corp: 8/121Kb lim: 17152 exec/s: 0 rss: 1116Mb L: 17088/17088 MS: 4 CrossOver-Custom-ChangeASCIIInt-Custom-
+#77	NEW    cov: 196 ft: 303 corp: 9/138Kb lim: 17152 exec/s: 0 rss: 1116Mb L: 17088/17088 MS: 2 ChangeASCIIInt-Custom-
+#89	NEW    cov: 196 ft: 305 corp: 10/154Kb lim: 17152 exec/s: 0 rss: 1116Mb L: 17088/17088 MS: 4 ChangeBinInt-Custom-ChangeBinInt-Custom-
+#90	NEW    cov: 196 ft: 329 corp: 11/171Kb lim: 17152 exec/s: 0 rss: 1116Mb L: 17088/17088 MS: 2 ChangeBinInt-Custom-
+#97	NEW    cov: 196 ft: 351 corp: 12/188Kb lim: 17152 exec/s: 0 rss: 1116Mb L: 17088/17088 MS: 4 ChangeASCIIInt-Custom-ShuffleBytes-Custom-
+#113	NEW    cov: 196 ft: 353 corp: 13/204Kb lim: 17152 exec/s: 0 rss: 1116Mb L: 17088/17088 MS: 2 ChangeBinInt-Custom-
+#126	NEW    cov: 196 ft: 354 corp: 14/221Kb lim: 17152 exec/s: 0 rss: 1116Mb L: 17088/17088 MS: 6 ChangeBinInt-Custom-ChangeBit-Custom-ShuffleBytes-Custom-
+#148	NEW    cov: 196 ft: 356 corp: 15/238Kb lim: 17152 exec/s: 0 rss: 1116Mb L: 17088/17088 MS: 4 ShuffleBytes-Custom-ChangeBinInt-Custom-
+#159	NEW    cov: 196 ft: 359 corp: 16/255Kb lim: 17152 exec/s: 0 rss: 1116Mb L: 17088/17088 MS: 2 ChangeByte-Custom-
+#281	REDUCE cov: 196 ft: 359 corp: 16/253Kb lim: 17152 exec/s: 0 rss: 1116Mb L: 3720/17088 MS: 4 InsertByte-Custom-EraseBytes-Custom-
+#352	NEW    cov: 196 ft: 366 corp: 17/270Kb lim: 17152 exec/s: 0 rss: 1116Mb L: 17088/17088 MS: 2 ChangeBinInt-Custom-
+#778	NEW    cov: 196 ft: 369 corp: 18/287Kb lim: 17152 exec/s: 778 rss: 1117Mb L: 17088/17088 MS: 6 CopyPart-Custom-ChangeBit-Custom-ChangeByte-Custom-
+#1040	REDUCE cov: 196 ft: 369 corp: 18/285Kb lim: 17152 exec/s: 1040 rss: 1117Mb L: 2341/17088 MS: 4 InsertRepeatedBytes-Custom-CrossOver-Custom-
+#2036	REDUCE cov: 196 ft: 369 corp: 18/285Kb lim: 17152 exec/s: 1018 rss: 1117Mb L: 2168/17088 MS: 4 ShuffleBytes-Custom-EraseBytes-Custom-
+#2048	pulse  cov: 196 ft: 369 corp: 18/285Kb lim: 17152 exec/s: 1024 rss: 1117Mb
+#2836	REDUCE cov: 196 ft: 369 corp: 18/285Kb lim: 17152 exec/s: 709 rss: 1117Mb L: 1967/17088 MS: 8 CrossOver-Custom-ChangeBinInt-Custom-InsertRepeatedBytes-Custom-EraseBytes-Custom-
+#2839	REDUCE cov: 196 ft: 369 corp: 18/284Kb lim: 17152 exec/s: 709 rss: 1117Mb L: 1311/17088 MS: 6 InsertByte-Custom-ChangeBinInt-Custom-EraseBytes-Custom-
+#2936	REDUCE cov: 196 ft: 369 corp: 18/284Kb lim: 17152 exec/s: 734 rss: 1117Mb L: 838/17088 MS: 4 CrossOver-Custom-EraseBytes-Custom-
+#3192	REDUCE cov: 196 ft: 369 corp: 18/284Kb lim: 17152 exec/s: 798 rss: 1117Mb L: 482/17088 MS: 2 EraseBytes-Custom-
+#4096	pulse  cov: 196 ft: 369 corp: 18/284Kb lim: 17152 exec/s: 682 rss: 1117Mb
+#4550	REDUCE cov: 196 ft: 369 corp: 18/284Kb lim: 17152 exec/s: 758 rss: 1117Mb L: 361/17088 MS: 8 InsertByte-Custom-ChangeBinInt-Custom-ChangeASCIIInt-Custom-EraseBytes-Custom-
+#5638	REDUCE cov: 196 ft: 369 corp: 18/283Kb lim: 17152 exec/s: 704 rss: 1117Mb L: 300/17088 MS: 8 ChangeBit-Custom-CMP-Custom-CrossOver-Custom-EraseBytes-Custom- DE: "A\000\000\000"-
+#6113	REDUCE cov: 196 ft: 369 corp: 18/283Kb lim: 17152 exec/s: 679 rss: 1117Mb L: 192/17088 MS: 8 ChangeByte-Custom-ChangeASCIIInt-Custom-CrossOver-Custom-EraseBytes-Custom-
+#6173	REDUCE cov: 196 ft: 369 corp: 18/283Kb lim: 17152 exec/s: 685 rss: 1117Mb L: 188/17088 MS: 10 InsertRepeatedBytes-Custom-CMP-Custom-CMP-Custom-ChangeBit-Custom-EraseBytes-Custom- DE: "\001\000\000\000"-"\276\200\013c\311\014\014/y\357,\342.\220\356\332"-
+#6339	REDUCE cov: 196 ft: 369 corp: 18/283Kb lim: 17152 exec/s: 704 rss: 1117Mb L: 120/17088 MS: 2 EraseBytes-Custom-
+#6359	REDUCE cov: 196 ft: 369 corp: 18/283Kb lim: 17152 exec/s: 706 rss: 1117Mb L: 96/17088 MS: 10 ChangeBit-Custom-ChangeBit-Custom-ChangeBinInt-Custom-ShuffleBytes-Custom-EraseBytes-Custom-
+#6476	REDUCE cov: 196 ft: 369 corp: 18/283Kb lim: 17152 exec/s: 719 rss: 1117Mb L: 58/17088 MS: 4 ChangeBit-Custom-EraseBytes-Custom-
+#6622	REDUCE cov: 196 ft: 369 corp: 18/283Kb lim: 17152 exec/s: 735 rss: 1117Mb L: 41/17088 MS: 2 EraseBytes-Custom-
+#6841	REDUCE cov: 196 ft: 369 corp: 18/283Kb lim: 17152 exec/s: 684 rss: 1117Mb L: 21/17088 MS: 6 PersAutoDict-Custom-ChangeByte-Custom-EraseBytes-Custom- DE: "\276\200\013c\311\014\014/y\357,\342.\220\356\332"-
+#7277	REDUCE cov: 196 ft: 369 corp: 18/283Kb lim: 17152 exec/s: 661 rss: 1117Mb L: 12/17088 MS: 2 EraseBytes-Custom-
+#7483	REDUCE cov: 196 ft: 369 corp: 18/283Kb lim: 17152 exec/s: 680 rss: 1117Mb L: 10/17088 MS: 8 InsertByte-Custom-ChangeBinInt-Custom-PersAutoDict-Custom-EraseBytes-Custom- DE: "A\000\000\000"-
+#7769	NEW    cov: 196 ft: 370 corp: 19/300Kb lim: 17152 exec/s: 706 rss: 1117Mb L: 17088/17088 MS: 2 PersAutoDict-Custom- DE: "\276\200\013c\311\014\014/y\357,\342.\220\356\332"-
+#8192	pulse  cov: 196 ft: 370 corp: 19/300Kb lim: 17152 exec/s: 682 rss: 1117Mb
+#8744	REDUCE cov: 196 ft: 370 corp: 19/300Kb lim: 17152 exec/s: 672 rss: 1117Mb L: 9/17088 MS: 6 ChangeBinInt-Custom-InsertByte-Custom-EraseBytes-Custom-
+#8865	REDUCE cov: 196 ft: 370 corp: 19/300Kb lim: 17152 exec/s: 681 rss: 1117Mb L: 7/17088 MS: 2 EraseBytes-Custom-
+#9027	REDUCE cov: 196 ft: 370 corp: 19/300Kb lim: 17152 exec/s: 694 rss: 1117Mb L: 5/17088 MS: 4 ShuffleBytes-Custom-EraseBytes-Custom-
+#9161	REDUCE cov: 196 ft: 370 corp: 19/300Kb lim: 17152 exec/s: 654 rss: 1117Mb L: 3/17088 MS: 8 ChangeBit-Custom-InsertByte-Custom-ChangeBinInt-Custom-EraseBytes-Custom-
+#9411	REDUCE cov: 196 ft: 370 corp: 19/300Kb lim: 17152 exec/s: 672 rss: 1117Mb L: 2/17088 MS: 2 EraseBytes-Custom-
+#9762	REDUCE cov: 196 ft: 370 corp: 19/300Kb lim: 17152 exec/s: 697 rss: 1117Mb L: 1/17088 MS: 2 EraseBytes-Custom-
+#16384	pulse  cov: 196 ft: 370 corp: 19/300Kb lim: 17152 exec/s: 682 rss: 1117Mb
+#32768	pulse  cov: 196 ft: 370 corp: 19/300Kb lim: 17152 exec/s: 668 rss: 1118Mb
+#65536	pulse  cov: 196 ft: 370 corp: 19/300Kb lim: 17152 exec/s: 675 rss: 1118Mb
+#79947	DONE   cov: 196 ft: 370 corp: 19/300Kb lim: 17152 exec/s: 660 rss: 1118Mb
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 123.8 s -- in org.pqcfuzz.fuzz.PqcDecodeFuzzTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
