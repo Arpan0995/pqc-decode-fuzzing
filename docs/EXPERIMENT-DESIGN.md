@@ -4,9 +4,10 @@
 Decode and Verify Paths*
 
 **Author:** Arpan Sharma
-**Status:** Design v0.2 - pre-registration of research questions, hypotheses, and method, with four
-amendments recorded in §12. The amendments were made during instrument construction, before any results
-were collected or reported; §1 - §11 are otherwise as pre-registered.
+**Status:** Design v0.3 - pre-registration of research questions, hypotheses, and method, with six
+amendments recorded in §12. A1 to A4 were made during instrument construction, before any results
+were collected or reported; A5 and A6 are dated extensions, each written before its own runs. §1 - §11
+are otherwise as pre-registered.
 **Repository:** `pqc-decode-fuzzing` (standalone).
 
 ---
@@ -178,7 +179,11 @@ Four changes were made while building the instrument, before any results were co
 (A5) was added on 2026-09-04 to extend the study to a second implementation. Each is recorded here with
 what prompted it, because a pre-registration that is quietly edited is worth nothing. None was made in
 response to a campaign result; A1 to A4 came from reading the library and from a smoke run during
-construction, and A5 records its own smoke finding before its campaigns ran.
+construction, and A5 records its own smoke finding before its campaigns ran. A sixth (A6) was added on
+2026-09-21 and is of a different kind: it adds no target and changes no rule, it repeats the campaigns
+under further seeds and on the current library release and measures how sensitive the instrument is.
+It was written before the runs it describes, and its analyses are labelled exploratory because they
+were designed after the results of A1 to A5 were known.
 
 ### A1 - Target the current API, not the deprecated `pqc.crypto` shim
 
@@ -312,6 +317,66 @@ checks. Same campaign parameters as the BouncyCastle arm: 100,000 inputs per tar
 `results/jdk25/`, `results/jdk24/` and `results/jdk27ea/`. The coverage-guided harnesses for the two
 parse-only JDK targets fail by design on the empty input (the finding above) and are opt-in
 (`-Dpqcfuzz.jdk.parse=true`); the finding itself is pinned by `JdkKeyLengthValidationTest`.
+
+### A6 - Replication across seeds, the current release, and a sensitivity analysis (added 2026-09-21)
+
+**When.** Written on 2026-09-21, after every campaign reported under A1 to A5 had been run and
+written up, and before any run described here. Nothing in it can change a pre-registered verdict:
+H1 to H4 are scored from the campaigns already recorded, and the runs below are reported beside
+them, never in place of them. Because the questions were chosen with the earlier results in hand,
+the analyses are exploratory and the paper labels them so.
+
+**What prompted it.** Two fair objections to the study as it stood. A single seed says nothing about
+how much of a result is luck, and a positive control that fires on a quarter of all inputs shows the
+instrument can see an easy defect without saying how hard a defect it could still see.
+
+**Runs.** (1) *Seeds.* The BouncyCastle campaign (nine targets) and the JDK campaign (six targets,
+OpenJDK 25.0.2) are repeated under ten further seeds, `20260718` to `20260727`, with every other
+parameter as before: 100,000 inputs per target, 5,000 ms per-input budget,
+`-XX:-OmitStackTraceInFastThrow`. (2) *Current release.* BouncyCastle 1.86 was released on
+2026-09-11; the nine-target campaign is run against it under the original seed and the ten further
+seeds. (3) *Control.* The two ML-DSA targets that carry the 1.84 control
+(`ml-dsa-65-pubkey-parse`, `ml-dsa-65-parse-verify`) are run against 1.84 under the same ten
+further seeds. (4) *Coverage-guided time to detection.* The Jazzer harness for the composed ML-DSA
+target is run against 1.84 ten times from an empty corpus and the time to the first failure is
+recorded. (5) *A graded synthetic control* (added to this amendment on 2026-09-21, before it ran).
+`seeded-guard-k<K>` is the library's ML-DSA-65 public-key decoder followed by one planted fault, an
+`ArrayIndexOutOfBoundsException` that fires only when the input has the correct length, parses, and
+holds the complement of the genuine key's bits in the *K* bits starting at byte 1000. Raising *K*
+makes the same fault rarer without changing anything else. The mutation campaign runs it for
+*K* = 1, 2, 4, 8, 12, 16, 24, 32 and 64 under the original seed and the ten further seeds; the
+coverage-guided harness runs it for *K* = 8, 16, 32 and 64, five trials each from the genuine seed,
+two minutes per trial. The target is synthetic, is labelled so wherever it is reported, is not
+registered with the campaign's `bc`, `jdk` or `all` groups, and says nothing about any library: it
+measures the instrument. Results are written to `results/a6/`.
+
+**Measures.** For every distinct anomaly the report now records the position in the mutation stream
+of the first input that reached it (`First seen at input`), so a defect's reachability is stated
+as a number rather than implied by a hit count. Per seed: the outcome counts per target, the number
+of distinct anomalies, and for the control the position of first detection and the share of inputs
+that reach the defect, overall and per mutation operator. Across seeds: whether any seed changes a
+verdict, and the range of the control's detection position.
+
+**What a clean result bounds.** If a target shows zero anomalies in *n* inputs, the one-sided 95
+percent upper confidence bound on the probability that one further input drawn from the same
+mutation distribution produces an anomaly is 3/*n* (the rule of three). The bound is stated per
+target and pooled, for the original campaign and for all seeds together. It is a statement about
+this input distribution and this oracle, not about the code: a defect the mutation operators cannot
+reach has probability zero under the distribution and is invisible to the bound, which is why the
+control and the operator breakdown are reported beside it.
+
+**Expectations, stated before the runs.** No seed changes a verdict on 1.85 or on the JDK. 1.86
+behaves as 1.85 on all nine targets. The control is detected on every seed within the first
+hundred inputs on both targets, by the operators that change the input length and by no operator
+that preserves it. Coverage-guided fuzzing finds the control within seconds on every trial. On the synthetic control
+the mutation campaign is expected to find the fault on every seed for small *K* and on none for
+*K* of 32 and above, with the crossover somewhere between 8 and 16 bits; the coverage-guided
+harness, which sees the comparison, is expected to find it at every *K*.
+
+**Limits.** Ten seeds measure the stability of this instrument, not the absence of defects. The
+sensitivity analysis characterizes one real defect of one class (a missing length check); it does
+not show what the instrument would do with a defect that needs a specific value at a specific
+offset, and the paper says so.
 
 ### Effect on the hypotheses
 

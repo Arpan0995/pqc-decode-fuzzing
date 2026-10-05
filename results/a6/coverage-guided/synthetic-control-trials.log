@@ -1,0 +1,23 @@
+Mon Sep 21 14:23:14 CDT 2026
+k=8 trial=1 exit=1 wall=3s | #470	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1395Mb L: 1/1952 MS: 10  | org.opentest4j.AssertionFailedError: seeded-guard-k8: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=8 trial=2 exit=1 wall=3s | #500	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1403Mb L: 1/1952 MS: 8 C | org.opentest4j.AssertionFailedError: seeded-guard-k8: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=8 trial=3 exit=1 wall=3s | #807	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1318Mb L: 1/1952 MS: 4 C | org.opentest4j.AssertionFailedError: seeded-guard-k8: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=8 trial=4 exit=1 wall=3s | #602	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1305Mb L: 1/1952 MS: 2 E | org.opentest4j.AssertionFailedError: seeded-guard-k8: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=8 trial=5 exit=1 wall=3s | #1126	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1230Mb L: 1/1952 MS: 8  | org.opentest4j.AssertionFailedError: seeded-guard-k8: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=16 trial=1 exit=1 wall=3s | #615	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1368Mb L: 1/1952 MS: 2 E | org.opentest4j.AssertionFailedError: seeded-guard-k16: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=16 trial=2 exit=1 wall=3s | #963	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1393Mb L: 1/1952 MS: 4 S | org.opentest4j.AssertionFailedError: seeded-guard-k16: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=16 trial=3 exit=1 wall=3s | #428	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1342Mb L: 1/1952 MS: 8 S | org.opentest4j.AssertionFailedError: seeded-guard-k16: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=16 trial=4 exit=1 wall=2s | #287	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1297Mb L: 1/1952 MS: 2 E | org.opentest4j.AssertionFailedError: seeded-guard-k16: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=16 trial=5 exit=1 wall=3s | #774	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1361Mb L: 1/1952 MS: 2 E | org.opentest4j.AssertionFailedError: seeded-guard-k16: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=32 trial=1 exit=1 wall=3s | #604	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1397Mb L: 1/1952 MS: 2 E | org.opentest4j.AssertionFailedError: seeded-guard-k32: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=32 trial=2 exit=1 wall=6s | #524288	pulse  cov: 58 ft: 58 corp: 2/1953b lim: 4096 exec/s: 262144 rss: 1367Mb | org.opentest4j.AssertionFailedError: seeded-guard-k32: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=32 trial=3 exit=1 wall=3s | #642	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1266Mb L: 1/1952 MS: 2 E | org.opentest4j.AssertionFailedError: seeded-guard-k32: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=32 trial=4 exit=1 wall=3s | #923	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1352Mb L: 1/1952 MS: 6 C | org.opentest4j.AssertionFailedError: seeded-guard-k32: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=32 trial=5 exit=1 wall=2s | #848	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1331Mb L: 1/1952 MS: 4 C | org.opentest4j.AssertionFailedError: seeded-guard-k32: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=64 trial=1 exit=1 wall=3s | #459	REDUCE cov: 58 ft: 58 corp: 2/1973b lim: 1952 exec/s: 0 rss: 1333Mb L: 21/1952 MS: 8  | org.opentest4j.AssertionFailedError: seeded-guard-k64: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=64 trial=2 exit=1 wall=3s | #656	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1326Mb L: 1/1952 MS: 2 E | org.opentest4j.AssertionFailedError: seeded-guard-k64: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=64 trial=3 exit=1 wall=3s | #721	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1187Mb L: 1/1952 MS: 2 E | org.opentest4j.AssertionFailedError: seeded-guard-k64: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=64 trial=4 exit=1 wall=7s | #524288	pulse  cov: 58 ft: 58 corp: 2/1953b lim: 4096 exec/s: 262144 rss: 1360Mb | org.opentest4j.AssertionFailedError: seeded-guard-k64: UNEXPECTED_EXCEPTION on a 1952-byte input
+k=64 trial=5 exit=1 wall=5s | #581	REDUCE cov: 58 ft: 58 corp: 2/1953b lim: 1952 exec/s: 0 rss: 1379Mb L: 1/1952 MS: 2 E | org.opentest4j.AssertionFailedError: seeded-guard-k64: UNEXPECTED_EXCEPTION on a 1952-byte input
+Mon Sep 21 14:24:21 CDT 2026
+SEEDED_JAZZER_DONE

@@ -1,5 +1,6 @@
 package org.pqcfuzz.target;
 
+import org.pqcfuzz.target.control.SeededGuardTarget;
 import org.pqcfuzz.target.jdk.JdkMlDsa65ParseAndVerifyTarget;
 import org.pqcfuzz.target.jdk.JdkMlDsa65PublicKeyParseTarget;
 import org.pqcfuzz.target.jdk.JdkMlDsa65VerifyTarget;
@@ -83,6 +84,11 @@ public final class Targets {
      * @throws IllegalArgumentException if no such target is registered
      */
     public static FuzzTarget create(String name, long seed) {
+        if (name.startsWith(SeededGuardTarget.PREFIX)) {
+            // The synthetic control of amendment A6. Deliberately not registered: it must never run as
+            // part of "bc", "jdk" or "all", whose results are read as evidence about a library.
+            return new SeededGuardTarget(Integer.parseInt(name.substring(SeededGuardTarget.PREFIX.length())), seed);
+        }
         LongFunction<FuzzTarget> factory = FACTORIES.get(name);
         if (factory == null) {
             throw new IllegalArgumentException(

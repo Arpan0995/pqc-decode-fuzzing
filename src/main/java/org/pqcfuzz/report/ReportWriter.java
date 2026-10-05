@@ -208,6 +208,7 @@ public final class ReportWriter {
                 out.append("- Message: `").append(a.detail()).append("`\n");
             }
             out.append("- Hits: ").append(String.format("%,d", a.count())).append('\n');
+            out.append("- First seen at input: ").append(String.format("%,d", a.firstInput())).append('\n');
             out.append("- Found via: ").append(a.mutation()).append(" of seed ").append(a.seedIndex())
                     .append('\n');
             out.append("- Minimized reproducer: ").append(a.reproducer().length)

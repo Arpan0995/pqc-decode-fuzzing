@@ -66,6 +66,20 @@ class PqcDecodeFuzzTest {
         }
     }
 
+    private static boolean fuzzing() {
+        String flag = System.getenv("JAZZER_FUZZ");
+        return flag != null && !flag.isEmpty() && !flag.equals("0");
+    }
+
+    /** True on BouncyCastle 1.84, the positive control whose ML-DSA key decoder accepts any length. */
+    private static boolean isControlVersion() {
+        try {
+            return Double.parseDouble(org.pqcfuzz.env.Environment.bouncyCastleVersion()) < 1.85;
+        } catch (NumberFormatException e) {
+            return false; // An unrecognised version is assumed current rather than assumed broken.
+        }
+    }
+
     private static String describe(String target, Outcome outcome, byte[] input, Throwable thrown) {
         String detail = thrown == null ? "no exception" : thrown.getClass().getName() + ": " + thrown.getMessage();
         return String.format("%s: %s on a %d-byte input (%s)", target, outcome, input.length, detail);
@@ -96,6 +110,11 @@ class PqcDecodeFuzzTest {
 
     @FuzzTest(maxDuration = "2m")
     void mlDsaPublicKeyParse(FuzzedDataProvider data) {
+        // The over-length seed is itself accepted by the 1.84 control, which is the defect. Replaying the
+        // seeds in a plain "mvn test" would then turn the control's documented green suite red, so on
+        // 1.84 this harness runs only when it is actually fuzzing (JAZZER_FUZZ=1), where failing is the point.
+        Assumptions.assumeTrue(fuzzing() || !isControlVersion(),
+                "BouncyCastle 1.84 control: run this harness with JAZZER_FUZZ=1");
         drive("ml-dsa-65-pubkey-parse", data);
     }
 

@@ -1,0 +1,26 @@
+target:      seeded-guard-k2
+outcome:     UNEXPECTED_EXCEPTION
+exception:   java.lang.ArrayIndexOutOfBoundsException
+message:     seeded control fault behind a 2-bit guard
+top frame:   org.pqcfuzz.target.control.SeededGuardTarget.accepts:84
+hits:        12376
+found via:   RANDOM of seed 0
+input size:  1952 bytes (nominal 1952)
+
+input (hex, first 256 of 1952 bytes):
+  0000  5381b94483d366cdb2008ce18759af1304a92aa06aa944dd226769e8a4ceafae
+  0020  fd0c27bb4f54f3891700c6c7f09e5b3ab77063c0c029ffaa55c850043d1949df
+  0040  f468b1bf17492ad0c05005204a11e62894e6234134c2d7f7be69ba4e1eedf28d
+  0060  0f6ab48b5c4b13e4d0c8bb4041c4cd7797dc350044b7272719ceb33c6a4d0bf5
+  0080  7d753d4a92ae5bbe2858ba7fd0c023f7fb010acffae7afbf2b095d2f93f5fd16
+  00a0  277241ad0e16f95e61c78635cef342e38ef0ac1d0e4685d65721223425023c84
+  00c0  8789dec0555b11027a0fe54d986a316658a3b432f4cc20e7d8b627a339c4cbaf
+  00e0  957538c47b45e323d8fd738ee80fc063287678267a7fc6ad85d9a677372c1058
+
+java.lang.ArrayIndexOutOfBoundsException: seeded control fault behind a 2-bit guard
+	at org.pqcfuzz.target.control.SeededGuardTarget.accepts(SeededGuardTarget.java:84)
+	at org.pqcfuzz.run.TargetExecutor.lambda$execute$0(TargetExecutor.java:43)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)

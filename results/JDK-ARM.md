@@ -97,6 +97,14 @@ fix is a length check in `NamedKeyFactory` (or the `NamedX509Key` constructor), 
 
 ## Coverage-guided run (Jazzer, JDK 25.0.2)
 
+> **Correction, 2026-09-21 (design amendment A6).** The runs in this section used the fuzzing
+> framework's defaults: an empty starting corpus and coverage instrumentation of the harness package
+> only. On inspection they never left the first length check, so the execution counts below are not
+> evidence of anything and are withdrawn. The statement that the agent instruments JDK 25 is also
+> wrong: Jazzer 0.22.1 cannot read Java 25 class files, and the JDK's provider classes are not
+> instrumented. The finding on the two parse-only harnesses stands, because the empty input is the
+> first input the engine tries. The corrected runs are in `results/a6/A6-RESULTS.md`, sections 3 and 6.
+
 Each JDK target was run under Jazzer for its two-minute budget, one target per JVM (Jazzer's JUnit
 integration fuzzes one test per run). The Jazzer agent instruments JDK 25 without trouble.
 

@@ -1,0 +1,11 @@
+target:      jdk-ml-kem-768-pubkey-parse
+outcome:     ACCEPTED
+exception:   -
+message:     
+top frame:   -
+hits:        29763
+found via:   LENGTH_EDGE of seed 3
+input size:  0 bytes (nominal 1184)
+
+input (hex):
+  (empty)

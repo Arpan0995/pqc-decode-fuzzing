@@ -72,7 +72,7 @@ public final class CampaignRunner {
                 }
 
                 if (outcome.isAnomaly()) {
-                    record(anomalies, execution, input);
+                    record(anomalies, execution, input, i + 1);
                 }
                 if ((i + 1) % PROGRESS_INTERVAL == 0) {
                     log.printf("    %s: %,d/%,d inputs, %d distinct anomal%s%n",
@@ -160,7 +160,7 @@ public final class CampaignRunner {
     }
 
     private static void record(Map<AnomalySignature, Anomaly> anomalies, Execution execution,
-                               MutatedInput input) {
+                               MutatedInput input, long position) {
         AnomalySignature signature = execution.signature();
         Anomaly existing = anomalies.get(signature);
         if (existing != null) {
@@ -173,7 +173,8 @@ public final class CampaignRunner {
                 stackTraceOf(execution.thrown()),
                 input.bytes(),
                 input.mutation(),
-                input.seedIndex()));
+                input.seedIndex(),
+                position));
     }
 
     private static String stackTraceOf(Throwable t) {

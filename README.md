@@ -16,8 +16,11 @@ Instrument built and validated; campaigns run. Nine BouncyCastle targets, two fu
 [`results/`](results/). Since 2026-09-04 the same campaign also runs against the JDK's own ML-KEM and
 ML-DSA providers (six `jdk-*` targets, JDK 24, 25 and 27-ea): see [`results/JDK-ARM.md`](results/JDK-ARM.md),
 where the parse-only decoders turn out to accept a public key of any length and defer the size check to
-the point of use. The pre-registered design - targets, outcome classification, hypotheses, and the
-four amendments made during construction - is in
+the point of use. Since 2026-09-21 (design amendment A6) the campaigns are repeated under ten further
+seeds and on BouncyCastle 1.86, the control is measured across seeds and operators, a graded synthetic
+control measures how rare a fault each method can still find, and the coverage-guided harnesses run in
+a corrected configuration: see [`results/a6/A6-RESULTS.md`](results/a6/A6-RESULTS.md). The
+pre-registered design - targets, outcome classification, hypotheses, and its six amendments - is in
 [`docs/EXPERIMENT-DESIGN.md`](docs/EXPERIMENT-DESIGN.md); **read that first.**
 
 ## The instrument finds real defects
@@ -52,6 +55,12 @@ comparable:
 2. **Coverage-guided fuzzing** (Jazzer): JUnit5 `@FuzzTest` harnesses driving the same targets with
    libFuzzer-based JVM coverage feedback. The campaign generates inputs blind; Jazzer evolves them
    toward new coverage, so it can reach branches random mutation would find only by luck.
+   The harnesses start from the same genuine seeds as the campaign, plus one over-length seed per
+   target, and the library's classes are instrumented for coverage
+   (`src/test/resources/junit-platform.properties`). Neither is the framework's default, and both
+   matter: with an empty corpus and only the harness instrumented, a harness runs tens of millions of
+   executions without ever passing the decoder's first length check
+   ([`results/a6/A6-RESULTS.md`](results/a6/A6-RESULTS.md), section 6).
 
 Every campaign replays from its seed, which fixes the key pairs, the seed corpus, and the mutation
 stream.
@@ -102,9 +111,16 @@ mvn test -Dbouncycastle.version=1.84        # the same suite against the control
 mvn package
 java -XX:-OmitStackTraceInFastThrow -jar target/pqc-fuzz.jar --inputs=100000
 
-# Coverage-guided fuzzing (expected to FAIL on 1.84 - that is the control working)
-JAZZER_FUZZ=1 mvn test -Dtest=PqcDecodeFuzzTest
-JAZZER_FUZZ=1 mvn test -Dtest=PqcDecodeFuzzTest -Dbouncycastle.version=1.84
+# Coverage-guided fuzzing, one harness per JVM (expected to FAIL on 1.84 - that is the control working)
+JAZZER_FUZZ=1 mvn test -Dtest='PqcDecodeFuzzTest#mlDsaParseAndVerify'
+JAZZER_FUZZ=1 mvn test -Dtest='PqcDecodeFuzzTest#mlDsaParseAndVerify' -Dbouncycastle.version=1.84
+
+# Regenerate the seed files the harnesses start from (run on JDK 24 or later to include the JDK targets)
+java -cp target/pqc-fuzz.jar org.pqcfuzz.SeedExport src/test/resources/org/pqcfuzz/fuzz/PqcDecodeFuzzTestInputs
+
+# The graded synthetic control (design amendment A6): K guarded bits
+java -XX:-OmitStackTraceInFastThrow -jar target/pqc-fuzz.jar --targets=seeded-guard-k12 --out=/tmp/guard
+JAZZER_FUZZ=1 mvn test -Dtest='SeededGuardFuzzTest#seededGuardK32'
 
 # The JDK arm (design amendment A5): the same campaign against the JDK's own providers, JDK 24 or later
 java -XX:-OmitStackTraceInFastThrow -jar target/pqc-fuzz.jar --targets=jdk --out=results/jdk25
@@ -129,8 +145,9 @@ so does the generated report.
 
 ## Toolchain
 
-Java 21 (pinned OpenJDK 21); BouncyCastle `bcprov-jdk18on` **1.85** under test, **1.84** as the control
-(`-Dbouncycastle.version=`); Jazzer (`jazzer-junit`) 0.22.1; Maven. Both BC versions expose the same
+Java 21 (pinned OpenJDK 21); BouncyCastle `bcprov-jdk18on` **1.85** and **1.86** under test, **1.84** as
+the control (`-Dbouncycastle.version=`; build each version from a clean tree, `mvn clean package`, or
+the shaded jar keeps the previous version's classes); Jazzer (`jazzer-junit`) 0.22.1; Maven. Both BC versions expose the same
 `org.bouncycastle.crypto.*` API, so one source tree targets either. Apple-Silicon runs are exploratory
 for throughput; robustness findings are host-independent.
 
@@ -139,7 +156,8 @@ for throughput; robustness findings are host-independent.
 ```
 docs/EXPERIMENT-DESIGN.md   Pre-registered design + amendments (read this first)
 src/main/java/org/pqcfuzz/
-  target/                   The nine targets and the registry
+  target/                   The nine BouncyCastle targets, the six JDK targets, the synthetic control, the registry
+  SeedExport.java           Writes each target's genuine inputs as seeds for the coverage-guided harnesses
   mutate/                   Mutation strategies and the generator
   classify/                 Outcome, the documented-rejection whitelist, anomaly signatures
   run/                      Campaign runner, per-input timeouts, reproducer minimization

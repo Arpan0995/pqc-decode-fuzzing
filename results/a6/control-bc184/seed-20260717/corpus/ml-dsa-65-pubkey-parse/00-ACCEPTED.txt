@@ -1,0 +1,12 @@
+target:      ml-dsa-65-pubkey-parse
+outcome:     ACCEPTED
+exception:   -
+message:     
+top frame:   -
+hits:        26405
+found via:   TRUNCATE of seed 0
+input size:  33 bytes (nominal 1952)
+
+input (hex):
+  0000  0000000000000000000000000000000000000000000000000000000000000000
+  0020  00

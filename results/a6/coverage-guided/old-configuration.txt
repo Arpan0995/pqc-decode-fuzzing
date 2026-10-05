@@ -1,0 +1,12 @@
+# ml-dsa-65-pubkey-parse harness, BouncyCastle 1.85, two minutes: old-configuration
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 16 ft: 16 corp: 1/1b exec/s: 0 rss: 1055Mb
+#524288	pulse  cov: 16 ft: 16 corp: 1/1b lim: 4096 exec/s: 262144 rss: 1068Mb
+#1048576	pulse  cov: 16 ft: 16 corp: 1/1b lim: 4096 exec/s: 262144 rss: 1068Mb
+#2097152	pulse  cov: 16 ft: 16 corp: 1/1b lim: 4096 exec/s: 262144 rss: 1085Mb
+#4194304	pulse  cov: 16 ft: 16 corp: 1/1b lim: 4096 exec/s: 246723 rss: 1085Mb
+#8388608	pulse  cov: 16 ft: 16 corp: 1/1b lim: 4096 exec/s: 239674 rss: 1085Mb
+#16777216	pulse  cov: 16 ft: 16 corp: 1/1b lim: 4096 exec/s: 239674 rss: 1085Mb
+#28777142	DONE   cov: 16 ft: 16 corp: 1/1b lim: 4096 exec/s: 237827 rss: 1085Mb
+library classes instrumented for coverage: 0

@@ -18,9 +18,10 @@ public final class Anomaly {
     private Mutation mutation;
     private int seedIndex;
     private long count;
+    private final long firstInput;
 
     Anomaly(AnomalySignature signature, String detail, String stackTrace,
-            byte[] reproducer, Mutation mutation, int seedIndex) {
+            byte[] reproducer, Mutation mutation, int seedIndex, long firstInput) {
         this.signature = signature;
         this.detail = detail;
         this.stackTrace = stackTrace;
@@ -28,6 +29,7 @@ public final class Anomaly {
         this.mutation = mutation;
         this.seedIndex = seedIndex;
         this.count = 1;
+        this.firstInput = firstInput;
     }
 
     /**
@@ -73,6 +75,15 @@ public final class Anomaly {
 
     public int seedIndex() {
         return seedIndex;
+    }
+
+    /**
+     * The 1-based position in the mutation stream of the first input that hit this signature. With the
+     * hit count it says how hard the defect is to reach: a small value means the campaign found it at
+     * once, a large one that it needed most of its budget (design amendment A6).
+     */
+    public long firstInput() {
+        return firstInput;
     }
 
     /** How many inputs hit this signature — a rough measure of how easy the defect is to reach. */
